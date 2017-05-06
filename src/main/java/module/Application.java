@@ -55,13 +55,16 @@ public class Application {
 	@Column(name = "STATUS", nullable = false)
 	private String status;
 	
+	@Column(name = "RESUMEURL")
+	private String resumeUrl;
+	
 	public long getaID() {
 		return aID;
 	}
-
+/*	aID is auto generate, do not have the setter
 	public void setaID(long aID) {
 		this.aID = aID;
-	}
+	}*/
 
 	public JobSeeker getJobSeeker() {
 		return jobSeeker;
@@ -109,5 +112,13 @@ public class Application {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getResumeUrl() {
+		return resumeUrl;
+	}
+
+	public void setResumeUrl(String resumeUrl) {
+		this.resumeUrl = resumeUrl;
 	}
 }
