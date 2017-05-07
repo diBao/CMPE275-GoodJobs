@@ -1,4 +1,4 @@
-package module;
+package rest.module;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -56,14 +56,10 @@ public class Company {
 	private String password;
 	
 	@OneToMany(mappedBy = "pID")
-	private Set<Position> positionSet;
+	private Set<Position> positionSet = new HashSet<Position>();
 
 	public long getcID() {
 		return cID;
-	}
-
-	public void setcID(long cID) {
-		this.cID = cID;
 	}
 
 	public String getCompanyName() {

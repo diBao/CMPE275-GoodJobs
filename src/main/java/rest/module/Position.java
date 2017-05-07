@@ -1,4 +1,4 @@
-package module;
+package rest.module;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 //import javax.xml.bind.annotation.XmlTransient;
-import javax.persistence.CascadeType;
+//import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -114,6 +114,8 @@ public class Position {
 	public void setSeekerSet(Set<JobSeeker> seekerSet) {
 		this.seekerSet = seekerSet;
 	}
-	
-	
+
+	public Long getpID() {
+		return pID;
+	}	
 }

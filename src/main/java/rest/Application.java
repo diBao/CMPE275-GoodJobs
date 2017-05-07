@@ -1,4 +1,4 @@
-package main;
+package rest;
 
 /*
  * function: start of spring boot application

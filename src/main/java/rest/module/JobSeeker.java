@@ -1,4 +1,4 @@
-package module;
+package rest.module;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -65,18 +65,14 @@ public class JobSeeker {
 	
 	//@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	@ManyToMany(targetEntity = Position.class, fetch = FetchType.LAZY)
-	private Set<Position> interestSet;
+	private Set<Position> interestSet = new HashSet<Position>();
 	
 	//@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	@OneToMany(targetEntity=Position.class, fetch = FetchType.LAZY)
-	private Set<Position> applicationSet;
+	@OneToMany(targetEntity = Position.class, fetch = FetchType.LAZY)
+	private Set<Application> applicationSet = new HashSet<Application>();
 
 	public long getSID() {
 		return sID;
-	}
-
-	public void setSID(long sID) {
-		this.sID = sID;
 	}
 
 	public String getFirstName() {
@@ -159,11 +155,11 @@ public class JobSeeker {
 		this.interestSet = interestSet;
 	}
 
-	public Set<Position> getApplicationSet() {
+	public Set<Application> getApplicationSet() {
 		return applicationSet;
 	}
 
-	public void setApplicationSet(Set<Position> applicationSet) {
+	public void setApplicationSet(Set<Application> applicationSet) {
 		this.applicationSet = applicationSet;
 	}
 }

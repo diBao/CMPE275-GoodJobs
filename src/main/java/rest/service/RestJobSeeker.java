@@ -1,5 +1,8 @@
-package rest;
+package rest.service;
 
 public class RestJobSeeker {
-
+	
+	
+	
+	
 }
