@@ -125,4 +125,37 @@ public class Company {
 	public void setPositionSet(Set<Position> positionSet) {
 		this.positionSet = positionSet;
 	}
+	
+	public JSONObject getJSON() throws JSONException{
+		
+		JSONObject result = new JSONObject();
+		result.put("cid", getcID());
+		result.put("name", getCompanyName());
+		result.put("website", getWebsite());
+		result.put("image_url", getLogoImageUrl());
+		result.put("address", getAddress());
+		result.put("description", getDescription());
+		result.put("email", getEmail());
+		
+		JSONObject positions = new JSONObject();
+		Set<Position> positionsObj = getPositionSet();
+		
+		JSONObject[] positionArray = new JSONObject[positionsObj.size()];
+		int count = 0;
+		for(Position i : positionsObj){
+			JSONObject position = new JSONObject();
+			position.put("pid", i.getpID());
+			position.put("title", i.getTitle());
+			position.put("description", i.getDescription());
+			position.put("responsibility",  i.getResponsibility());
+			position.put("office",  i.getOfficeLocation());
+			
+			positionArray[count] = position;
+			count++;
+		}
+		positions.put("passenger",  positionArray);
+		
+		result.put("positions", positions);
+		return result;
+	}
 }

@@ -117,4 +117,30 @@ public class Application {
 	public void setResumeUrl(String resumeUrl) {
 		this.resumeUrl = resumeUrl;
 	}
+	
+	public JSONObject getJSON() throws JSONException{
+		
+		JSONObject result = new JSONObject();
+		result.put("aid", getaID());
+		result.put("first name", getFirstName());
+		result.put("last name", getLastName());
+		result.put("email", getEmail());
+		result.put("status", getStatus());
+		
+
+		JobSeeker jobseekerObj = getJobSeeker();
+		JSONObject jobseeker = new JSONObject();
+		jobseeker.put("capacity", jobseekerObj.getSID());
+		jobseeker.put("first name", jobseekerObj.getFirstName());
+		jobseeker.put("last name", jobseekerObj.getLastName());
+		jobseeker.put("picture", jobseekerObj.getPicture());
+		jobseeker.put("introduction", jobseekerObj.getIntroduction());
+		jobseeker.put("experience", jobseekerObj.getExperience());
+		jobseeker.put("education", jobseekerObj.getEducation());
+		jobseeker.put("skill", jobseekerObj.getSkills());
+		jobseeker.put("email", jobseekerObj.getEmail());
+		
+		result.put("jobseeker", jobseeker);
+		return result;
+	}
 }
