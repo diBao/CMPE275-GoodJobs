@@ -97,16 +97,6 @@ public class RestServiceController {
     /*******************
      * Company
      ***************/
-    
-
-//    10. A company needs to provide basic information upon registration
-//    Name
-//    Website
-//    Logo image URL
-//    Address of headquarters
-//    Description
-//    		…
-//    	Company can edit and update its own information at any time.
 
     @RequestMapping(value="/company", method=RequestMethod.POST)
     public  @ResponseBody String createCompany(
@@ -119,10 +109,38 @@ public class RestServiceController {
     		@RequestParam("password") String password
     		) {
 		RestCompany rest_company = new RestCompany(repo_jobseeker, repo_company, repo_application, repo_position);
+		
 		return rest_company.create_company(name, website, logoImageUrl, address, email,
 				description, password);
     }
     
+    @RequestMapping(value="/company/{id}", method=RequestMethod.POST)
+    public  @ResponseBody String updateCompany(
+    		@PathVariable Long id,
+    		@RequestParam("name") String name,
+    		@RequestParam("website") String website,
+    		@RequestParam("logoimageurl") String logoImageUrl,
+    		@RequestParam("address") String address,
+    		@RequestParam("email") String email,
+    		@RequestParam("description") String description,
+    		@RequestParam("password") String password
+    		) {
+    	RestCompany rest_company = new RestCompany(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_company.update_company(id, name, website, logoImageUrl, address, email,
+				description, password);
+    }
+    
+    @RequestMapping(
+			value = "/company/{id}", 
+			method = RequestMethod.GET)
+	public @ResponseBody String getCompany(
+			@PathVariable Long id,
+			@RequestParam("fliter") String filter) {
+		RestCompany rest_company = new RestCompany(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_company.search_company(id, filter);
+	}
+    
+
     
     
     
@@ -148,7 +166,21 @@ public class RestServiceController {
 //				education, skills, email, password);
 //  }
   
-    
+    @RequestMapping(value="/position", method=RequestMethod.POST)
+    public  @ResponseBody String createPosition(
+    		@RequestParam("title") String title,
+    		@RequestParam("description") String description,
+    		@RequestParam("responsibilities") String responsibilities,
+    		@RequestParam("officelocation") String officeLocation,
+    		@RequestParam("salary") Long salary
+    		) {
+    	//TODO 
+//		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
+//		return rest_position.create_position(title, description, responsibilities, officeLocation, salary);
+    	
+    	return "";
+    }
+  
    
     
 //    /* Create Passenger */
@@ -189,15 +221,17 @@ public class RestServiceController {
      *  Application
      *************/
     
-//    @RequestMapping(
-//			value = "/application", 
-//			method = RequestMethod.POST)
-//	public @ResponseBody String applyPosition(
-//			@RequestParam("id") Long id,
-//			@RequestParam("position") String position, //TODO possible duplicate parameter
-//			@RequestParam(value = "resumeUrl", required = false) String resumeUrl
-//			) {
+    @RequestMapping(
+			value = "/application", 
+			method = RequestMethod.POST)
+	public @ResponseBody String applyPosition(
+			@RequestParam("id") Long id,
+			@RequestParam("position") String position, //TODO possible duplicate parameter
+			@RequestParam(value = "resumeUrl", required = false) String resumeUrl
+			) {
+    	//TODO
 //		RestApplication rest_application = new RestApplication();
 //		return rest_application.apply_position(id, position, resumeUrl);
-//	}
+    	return "";
+	}
 }
