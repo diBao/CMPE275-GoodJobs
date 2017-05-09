@@ -21,7 +21,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
+import org.json.*;
 
 @Entity
 @Table(name="Company")
