@@ -55,11 +55,11 @@ public class RestJobSeeker {
 	}
 	
 	public String update_jobseeker(){
-		
+		return "";
 	}
 	
 	public String delete_jobseeker(){
-		
+		return "";
 	}
 	
 	public String mark_interest(Long id, String mark){

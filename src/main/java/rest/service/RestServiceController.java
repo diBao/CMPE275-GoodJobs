@@ -44,7 +44,7 @@ public class RestServiceController {
 //            HttpServletResponse response) throws ParseException{
     
 	@RequestMapping(
-			value = "jobseeker/{id}", 
+			value = "/jobseeker/{id}", 
 			method = RequestMethod.GET)
 	public @ResponseBody String getJobSeeker(@PathVariable Long id) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
@@ -69,7 +69,7 @@ public class RestServiceController {
     }
     
     @RequestMapping(
-			value = "jobseeker/{id}",
+			value = "/jobseeker/{id}",
 			params= "mark",
 			method = RequestMethod.POST)
 	public @ResponseBody String markInterest(
@@ -81,7 +81,7 @@ public class RestServiceController {
 	}
     
     @RequestMapping(
-			value = "jobseeker/{id}",
+			value = "/jobseeker/{id}",
 			params= "unmark",
 			method = RequestMethod.POST)
 	public @ResponseBody String unmarkInterest(
@@ -92,30 +92,36 @@ public class RestServiceController {
 		return rest_jobseeker.unmark_interest(id, unmark);
 	}
     
-//    Apply for a position
-//    A user can apply for a selected position in search result page or the interested jobs page.
-//    A user can choose to apply with his profile, or attach a resume. In both cases, the user name and email from the user’s profile becomes part of the application.
-//    For any apply operation, the user would receive an email notification with the information of position(s).
-//    You need to provide a view for a user to browse or cancel his applications.
-//    Each application has a status, Pending, Offered, Rejected, OfferAccepted, OfferRejcted, or Cancelled. The latter four states are also called terminal state. 
-//    A user can cancel a pending application and reject an offered application.
-//    The user can cancel (or reject) one or more applications (or offers) in one transaction.
-//    The company can cancel any application that is not in a terminal state. 
-//    Jobs of all states need to show up in the application view.
-//    A user cannot have more than 5 pending applications. 
-//    A user cannot apply for the same position again if the previous application is not in a terminal state.
-//    For any status change of an application, the job seeker receives an email update as well.
-    @RequestMapping(
-			value = "jobseeker/{id}", 
-			params= "position",
-			method = RequestMethod.POST)
-	public @ResponseBody String applyPosition(
-			@PathVariable Long id,
-			@RequestParam("position") String position
-			) {
-		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_jobseeker.apply_position(id, position);
-	}
+
+    
+    /*******************
+     * Company
+     ***************/
+    
+
+//    10. A company needs to provide basic information upon registration
+//    Name
+//    Website
+//    Logo image URL
+//    Address of headquarters
+//    Description
+//    		…
+//    	Company can edit and update its own information at any time.
+
+    @RequestMapping(value="/company", method=RequestMethod.POST)
+    public  @ResponseBody String createCompany(
+    		@RequestParam("name") String name,
+    		@RequestParam("website") String website,
+    		@RequestParam("logoimageurl") String logoImageUrl,
+    		@RequestParam("address") String address,
+    		@RequestParam("email") String email,
+    		@RequestParam("description") String description,
+    		@RequestParam("password") String password
+    		) {
+		RestCompany rest_company = new RestCompany(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_company.create_company(name, website, logoImageUrl, address, email,
+				description, password);
+    }
     
     
     
@@ -182,4 +188,16 @@ public class RestServiceController {
     /*************
      *  Application
      *************/
+    
+//    @RequestMapping(
+//			value = "/application", 
+//			method = RequestMethod.POST)
+//	public @ResponseBody String applyPosition(
+//			@RequestParam("id") Long id,
+//			@RequestParam("position") String position, //TODO possible duplicate parameter
+//			@RequestParam(value = "resumeUrl", required = false) String resumeUrl
+//			) {
+//		RestApplication rest_application = new RestApplication();
+//		return rest_application.apply_position(id, position, resumeUrl);
+//	}
 }

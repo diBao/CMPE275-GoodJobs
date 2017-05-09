@@ -35,15 +35,15 @@ public class JobSeeker {
 	
 	public JobSeeker(String firstName, String lastName, String picture, String selfIntroduction, 
 			String workExperience, String education, String skills, String email, String password){
-		setFirstName(firstName);
-		setLastName(lastName);
-		setPicture(picture);
-		setIntroduction(selfIntroduction);
-		setExperience(workExperience);
-		setEducation(education);
-		setSkills(skills);
-		setEmail(email);
-		setPassword(password);
+		this.setFirstName(firstName);
+		this.setLastName(lastName);
+		this.setPicture(picture);
+		this.setIntroduction(selfIntroduction);
+		this.setExperience(workExperience);
+		this.setEducation(education);
+		this.setSkills(skills);
+		this.setEmail(email);
+		this.setPassword(password);
 	}
 	
 	@Id

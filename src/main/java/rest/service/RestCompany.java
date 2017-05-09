@@ -20,8 +20,9 @@ public class RestCompany {
 		this.repo_position = repo_position;
 	} 	
 	
-	public String create_company(){
-		
+	public String create_company(String name, String website, String logoImageUrl, 
+			String address, String email, String description, String password){
+		return "";	
 	}
 	
 	public String read_company(){
@@ -35,8 +36,4 @@ public class RestCompany {
 	public delete_company(){
 		
 	}
-	
-	
-	
-	
 }
