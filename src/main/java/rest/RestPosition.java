@@ -1,7 +1,7 @@
 package rest;
 
-import repo.ApplicationRepo;
-import repo.PositionRepo;
+import rest.repo.ApplicationRepo;
+import rest.repo.PositionRepo;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+
+
 //import javax.xml.bind.annotation.XmlTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -30,6 +32,19 @@ import org.json.*;
 @JsonRootName(value = "JobSeeker")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JobSeeker {
+	
+	public JobSeeker(String firstName, String lastName, String picture, String selfIntroduction, 
+			String workExperience, String education, String skills, String email, String password){
+		setFirstName(firstName);
+		setLastName(lastName);
+		setPicture(picture);
+		setIntroduction(selfIntroduction);
+		setExperience(workExperience);
+		setEducation(education);
+		setSkills(skills);
+		setEmail(email);
+		setPassword(password);
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

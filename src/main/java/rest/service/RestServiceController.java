@@ -21,8 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RestServiceController {
 //    
-//    @Autowired
-//    private rest.repo.CompanyRepo repo_company;
+    @Autowired
+    private rest.repo.CompanyRepo repo_company;
+    @Autowired
+    private rest.repo.ApplicationRepo repo_application;
+    @Autowired
+    private rest.repo.PositionRepo repo_position;
+    @Autowired
+    private rest.repo.JobSeekerRepo repo_jobseeker;
 	
 	/*******************
 	 * JobSeeker
@@ -41,8 +47,8 @@ public class RestServiceController {
 			value = "jobseeker/{id}", 
 			method = RequestMethod.GET)
 	public @ResponseBody String getJobSeeker(@PathVariable Long id) {
-		RestJobSeeker rest_jobseeker = new RestJobSeeker();
-		return rest_jobseeker.get_jobseeker(id);
+		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_jobseeker.read_jobseeker(id);
 	}
 	
     @RequestMapping(value="/jobseeker", method=RequestMethod.POST)
@@ -57,7 +63,7 @@ public class RestServiceController {
     		@RequestParam("email") String email,
     		@RequestParam("password") String password
     		) {
-		RestJobSeeker rest_jobseeker = new RestJobSeeker();
+		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
 		return rest_jobseeker.create_jobseeker(firstName, lastName, picture, selfIntroduction, workExperience,
 				education, skills, email, password);
     }
@@ -70,7 +76,7 @@ public class RestServiceController {
 			@PathVariable Long id,
 			@RequestParam("mark") String mark
 			) {
-		RestJobSeeker rest_jobseeker = new RestJobSeeker();
+		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
 		return rest_jobseeker.mark_interest(id, mark);
 	}
     
@@ -82,7 +88,7 @@ public class RestServiceController {
 			@PathVariable Long id,
 			@RequestParam("unmark") String unmark
 			) {
-		RestJobSeeker rest_jobseeker = new RestJobSeeker();
+		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
 		return rest_jobseeker.unmark_interest(id, unmark);
 	}
     
@@ -99,7 +105,6 @@ public class RestServiceController {
 //    A user cannot have more than 5 pending applications. 
 //    A user cannot apply for the same position again if the previous application is not in a terminal state.
 //    For any status change of an application, the job seeker receives an email update as well.
-//TODO
     @RequestMapping(
 			value = "jobseeker/{id}", 
 			params= "position",
@@ -108,8 +113,8 @@ public class RestServiceController {
 			@PathVariable Long id,
 			@RequestParam("position") String position
 			) {
-		RestJobSeeker rest_jobseeker = new RestJobSeeker();
-		return rest_jobseeker.mark_interest(id, mark);
+		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_jobseeker.apply_position(id, position);
 	}
     
     
