@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<% include include/head.html %>
+<body ng-app="myApp">
+<!-- <% //include login.html %> -->
+<div class="wrapper">
+
+    <!-- Side bar -->
+    <!-- Side bar -->
+    <!-- Side bar -->
+    <% include include/sidebar_user.html %>
+
+    <!-- Right main panel -->
+    <!-- Right main panel -->
+    <!-- Right main panel -->
+    <div class="main-panel">
+        <!-- Right main panel - navbar -->
+        <% include include/navbar.html %>
+
+
+        <!-- Right main panel - content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="text-muted"><i class="pe-7s-like"></i> Love Jobs</h4>
+                            </div>
+                            <div class="content table-responsive">
+
+                                <table class="table table-hover" ng-controller="myCtrl" ng-show="jobs.length > 0">
+                                    <thead>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Salary</th>
+                                        <th>Country</th>
+                                        <th>City</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="x in jobs">
+                                            <td>{{x.ID}}</td>
+                                            <td>{{x.Name}}</td>
+                                            <td>${{x.Salary}}</td>
+                                            <td>{{x.Country}}</td>
+                                            <td>{{x.City}}</td>
+                                            <td><a href="">Apply Now<a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Right main panel - footer -->
+        <% include include/footer.html %>
+
+    </div>
+</div>
+
+
+</body>
+
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope, $http) {
+
+    //Loved joblist
+    $http.get("joblist").success(function (response){
+            $scope.jobs = response;
+        }
+    );
+});
+</script>
+
+	<!-- <script type="text/javascript">
+    	$(document).ready(function(){
+
+        	demo.initChartist();
+
+        	$.notify({
+            	icon: 'pe-7s-gift',
+            	message: "Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer."
+
+            },{
+                type: 'info',
+                timer: 4000
+            });
+
+    	});
+	</script> -->
+
+</html>
