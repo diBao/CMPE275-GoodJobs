@@ -68,8 +68,9 @@ public class RestServiceController {
 				education, skills, email, password);
     }
     
-    @RequestMapping(value="/jobseeker", method=RequestMethod.PUT)
+    @RequestMapping(value="/jobseeker/{id}", method=RequestMethod.PUT)
     public  @ResponseBody String updateJobSeeker(
+    		@PathVariable Long id,
     		@RequestParam(value = "firstname", required = false) String firstName, 
     		@RequestParam(value = "lastname", required = false) String lastName,
     		@RequestParam(value = "picture", required = false) String picture,
@@ -140,16 +141,16 @@ public class RestServiceController {
 				description, password);
     }
     
-    @RequestMapping(value="/company/{id}", method=RequestMethod.POST)
+    @RequestMapping(value="/company/{id}", method=RequestMethod.PUT)
     public  @ResponseBody String updateCompany(
     		@PathVariable Long id,
-    		@RequestParam("name") String name,
-    		@RequestParam("website") String website,
-    		@RequestParam("logoimageurl") String logoImageUrl,
-    		@RequestParam("address") String address,
-    		@RequestParam("email") String email,
-    		@RequestParam("description") String description,
-    		@RequestParam("password") String password
+    		@RequestParam(value = "name", required = false) String name,
+    		@RequestParam(value = "website", required = false) String website,
+    		@RequestParam(value = "logoimageurl", required = false) String logoImageUrl,
+    		@RequestParam(value = "address", required = false) String address,
+    		@RequestParam(value = "email", required = false) String email,
+    		@RequestParam(value = "description", required = false) String description,
+    		@RequestParam(value = "password", required = false) String password
     		) {
     	RestCompany rest_company = new RestCompany(repo_jobseeker, repo_company, repo_application, repo_position);
 		return rest_company.update_company(id, name, website, logoImageUrl, address, email,
