@@ -68,13 +68,30 @@ public class RestServiceController {
 				education, skills, email, password);
     }
     
+    @RequestMapping(value="/jobseeker", method=RequestMethod.PUT)
+    public  @ResponseBody String updateJobSeeker(
+    		@RequestParam(value = "firstname", required = false) String firstName, 
+    		@RequestParam(value = "lastname", required = false) String lastName,
+    		@RequestParam(value = "picture", required = false) String picture,
+    		@RequestParam(value = "selfintroduction", required = false) String selfIntroduction, 
+    		@RequestParam(value = "workexperience", required = false) String workExperience,
+    		@RequestParam(value = "education", required = false) String education, 
+    		@RequestParam(value = "skills", required = false) String skills,
+    		@RequestParam(value = "email", required = false) String email,
+    		@RequestParam(value = "password", required = false) String password
+    		) {
+		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_jobseeker.update_jobseeker(firstName, lastName, picture, selfIntroduction, workExperience,
+				education, skills, email, password);
+    }
+    
     @RequestMapping(
 			value = "/jobseeker/{id}",
 			params= "mark",
 			method = RequestMethod.POST)
 	public @ResponseBody String markInterest(
 			@PathVariable Long id,
-			@RequestParam("mark") String mark
+			@RequestParam("mark") Long mark
 			) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
 		return rest_jobseeker.mark_interest(id, mark);
@@ -86,12 +103,21 @@ public class RestServiceController {
 			method = RequestMethod.POST)
 	public @ResponseBody String unmarkInterest(
 			@PathVariable Long id,
-			@RequestParam("unmark") String unmark
+			@RequestParam("unmark") Long unmark
 			) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
 		return rest_jobseeker.unmark_interest(id, unmark);
 	}
     
+    @RequestMapping(
+			value = "/jobseeker/{id}",
+			method = RequestMethod.DELETE)
+	public @ResponseBody String deleteJobSeeker(
+			@PathVariable Long id
+			) {
+		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_jobseeker.delete_jobseeker(id);
+	}
 
     
     /*******************
