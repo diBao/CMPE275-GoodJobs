@@ -177,20 +177,23 @@ public class JobSeeker {
 	public void setApplicationSet(Set<Application> applicationSet) {
 		this.applicationSet = applicationSet;
 	}
-	public JSONObject getJSON() throws JSONException{
+	public String getJSON(){
 		
-		
-		JSONObject result = new JSONObject();
-		result.put("capacity", getSID());
-		result.put("first name", getFirstName());
-		result.put("last name", getLastName());
-		result.put("picture", getPicture());
-		result.put("introduction", getIntroduction());
-		result.put("experience", getExperience());
-		result.put("education", getEducation());
-		result.put("skill", getSkills());
-		result.put("email", getEmail());
-		
-		return result;
+		try{
+			JSONObject result = new JSONObject();
+			result.put("capacity", getSID());
+			result.put("first name", getFirstName());
+			result.put("last name", getLastName());
+			result.put("picture", getPicture());
+			result.put("introduction", getIntroduction());
+			result.put("experience", getExperience());
+			result.put("education", getEducation());
+			result.put("skill", getSkills());
+			result.put("email", getEmail());
+			return result.toString();
+		}
+		catch(JSONException e){
+			return e.toString();
+		}		
 	}
 }

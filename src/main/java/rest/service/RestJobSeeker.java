@@ -5,6 +5,8 @@ import org.json.JSONException;
 import rest.repo.*;
 import rest.module.*;
 
+import java.util.Set;
+import java.util.HashSet;
 
 
 public class RestJobSeeker {
@@ -27,7 +29,7 @@ public class RestJobSeeker {
 		
 		try{
 			repo_jobseeker.save(jobseeker);
-			return jobseeker.getJSON().toString();
+			return jobseeker.getJSON();
 		}
 		catch(Exception e){
 			//TODO error message
@@ -40,35 +42,126 @@ public class RestJobSeeker {
 		
 		JobSeeker jobseeker = repo_jobseeker.findById(id);
 		if(jobseeker != null){
-			try {
-				return jobseeker.getJSON().toString();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			return jobseeker.getJSON();
 		}
 		else{
 			//TODO error message 
 			return "No result found";
 		}
-		return "No result found";
 	}
 	
-	public String update_jobseeker(){
+	public String update_jobseeker(Long id, String firstName, String lastName, String picture, 
+			String selfIntroduction, String workExperience, String education, String skills, String email, String password){
+		
+		JobSeeker jobseeker = repo_jobseeker.findById(id);
+		if(jobseeker == null){
+			return "No Jobseeker found";
+		}
+		
+		if(firstName != null){
+			jobseeker.setFirstName(firstName);
+		}
+		if(lastName != null){
+			jobseeker.setLastName(lastName);
+		}
+		if(picture != null){
+			jobseeker.setPicture(picture);
+		}
+		if(selfIntroduction != null){
+			jobseeker.setIntroduction(selfIntroduction);
+		}
+		if(workExperience != null){
+			jobseeker.setExperience(workExperience);
+		}
+		if(education != null){
+			jobseeker.setEducation(education);
+		}
+		if(skills != null){
+			jobseeker.setSkills(skills);
+		}
+		if(email != null){
+			jobseeker.setEmail(email);
+		}
+		if(password != null){
+			jobseeker.setPassword(password);
+		}
+		
+		try {
+        	repo_jobseeker.save(jobseeker);
+        } catch (Exception e) {
+        	return "Jobseeker update failed";
+        }
+		
+		return jobseeker.getJSON();		
+	}
+	
+	public String delete_jobseeker(Long id){
+		
+		JobSeeker jobseeker = repo_jobseeker.findById(id);
+		if(jobseeker == null){
+			return "No result found";
+		}
+		
+		for(Position p : jobseeker.getInterestSet()){
+			p.getApplicationSet().remove(jobseeker);
+		}
+		
+		for(Application a : jobseeker.getApplicationSet()){
+			
+		}
+		
 		return "";
 	}
 	
-	public String delete_jobseeker(){
-		return "";
-	}
+	public String mark_interest(Long id, Long mark){
+		JobSeeker jobseeker = repo_jobseeker.findById(id);
+		Position position = repo_position.findById(mark);
+		if(jobseeker == null || position == null){
+			return "Input error";
+		}
+		if(jobseeker != null && position != null){
+			Set<Position> set_p = jobseeker.getInterestSet();
+			set_p.add(position);
+			jobseeker.setInterestSet(set_p);
+			
+			Set<JobSeeker> set_j = position.getSeekerSet();
+			set_j.add(jobseeker);
+			position.setSeekerSet(set_j);
+
+			repo_jobseeker.save(jobseeker);
+			repo_position.save(position);
+			return jobseeker.getJSON();
 	
-	public String mark_interest(Long id, String mark){
-		return null;
+		}
+		else{
+			return "Marking failed";
+		}
 		
 	}
 	
-	public String unmark_interest(Long id, String unmark) {
-		return null;
+	public String unmark_interest(Long id, Long unmark) {
+		JobSeeker jobseeker = repo_jobseeker.findById(id);
+		Position position = repo_position.findById(unmark);
+		if(jobseeker == null || position == null){
+			return "Input error";
+		}
+		if(jobseeker != null && position != null){
+			Set<Position> set_p = jobseeker.getInterestSet();
+			set_p.remove(position);
+			jobseeker.setInterestSet(set_p);
+			
+			Set<JobSeeker> set_j = position.getSeekerSet();
+			set_j.remove(jobseeker);
+			position.setSeekerSet(set_j);
+
+			repo_jobseeker.save(jobseeker);
+			repo_position.save(position);
+			return jobseeker.getJSON();
+
+		}
+		else{
+			return "Unmarking failed";
+		}
 	}
 	
 	public String apply_position(Long id, String position){

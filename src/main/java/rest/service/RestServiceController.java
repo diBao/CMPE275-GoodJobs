@@ -82,7 +82,7 @@ public class RestServiceController {
     		@RequestParam(value = "password", required = false) String password
     		) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_jobseeker.update_jobseeker(firstName, lastName, picture, selfIntroduction, workExperience,
+		return rest_jobseeker.update_jobseeker(id, firstName, lastName, picture, selfIntroduction, workExperience,
 				education, skills, email, password);
     }
     

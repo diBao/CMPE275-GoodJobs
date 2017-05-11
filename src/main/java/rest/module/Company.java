@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+
+
 //import javax.xml.bind.annotation.XmlTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,6 +31,18 @@ import org.json.*;
 @JsonRootName(value = "Company")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Company {
+	
+	public Company(String name, String website, String logoImageUrl, 
+			String address, String email, String description, String password){
+		this.setCompanyName(name);
+		this.setWebsite(website);
+		this.setLogoImageUrl(logoImageUrl);
+		this.setAddress(address);
+		this.setEmail(email);
+		this.setDescription(description);
+		this.setPassword(password);
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "CID")
@@ -126,36 +140,41 @@ public class Company {
 		this.positionSet = positionSet;
 	}
 	
-	public JSONObject getJSON() throws JSONException{
+	public String getJSON(){
 		
-		JSONObject result = new JSONObject();
-		result.put("cid", getcID());
-		result.put("name", getCompanyName());
-		result.put("website", getWebsite());
-		result.put("image_url", getLogoImageUrl());
-		result.put("address", getAddress());
-		result.put("description", getDescription());
-		result.put("email", getEmail());
-		
-		JSONObject positions = new JSONObject();
-		Set<Position> positionsObj = getPositionSet();
-		
-		JSONObject[] positionArray = new JSONObject[positionsObj.size()];
-		int count = 0;
-		for(Position i : positionsObj){
-			JSONObject position = new JSONObject();
-			position.put("pid", i.getpID());
-			position.put("title", i.getTitle());
-			position.put("description", i.getDescription());
-			position.put("responsibility",  i.getResponsibility());
-			position.put("office",  i.getOfficeLocation());
+		try{
+			JSONObject result = new JSONObject();
+			result.put("cid", getcID());
+			result.put("name", getCompanyName());
+			result.put("website", getWebsite());
+			result.put("image_url", getLogoImageUrl());
+			result.put("address", getAddress());
+			result.put("description", getDescription());
+			result.put("email", getEmail());
 			
-			positionArray[count] = position;
-			count++;
+			JSONObject positions = new JSONObject();
+			Set<Position> positionsObj = getPositionSet();
+			
+			JSONObject[] positionArray = new JSONObject[positionsObj.size()];
+			int count = 0;
+			for(Position i : positionsObj){
+				JSONObject position = new JSONObject();
+				position.put("pid", i.getpID());
+				position.put("title", i.getTitle());
+				position.put("description", i.getDescription());
+				position.put("responsibility",  i.getResponsibility());
+				position.put("office",  i.getOfficeLocation());
+				
+				positionArray[count] = position;
+				count++;
+			}
+			positions.put("passenger",  positionArray);
+			
+			result.put("positions", positions);
+			return result.toString();
 		}
-		positions.put("passenger",  positionArray);
-		
-		result.put("positions", positions);
-		return result;
+		catch(JSONException e){
+			return e.toString();
+		}		
 	}
 }
