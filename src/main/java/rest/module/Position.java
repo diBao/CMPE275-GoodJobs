@@ -53,8 +53,10 @@ public class Position {
 	@Column(name = "STATUS", nullable = false)
 	private String status;
 	
-	@ManyToMany(targetEntity=JobSeeker.class, fetch = FetchType.LAZY)
-	private Set<JobSeeker> seekerSet;
+	
+	// CHANGED seekerSet -> applicationSet
+	@ManyToMany(targetEntity=Application.class, fetch = FetchType.LAZY)
+	private Set<Application> applicationSet;
 	
 	@ManyToMany(targetEntity=JobSeeker.class, fetch = FetchType.LAZY)
 	private Set<JobSeeker> interestSet;
@@ -107,30 +109,42 @@ public class Position {
 		this.status = status;
 	}
 
-	public Set<JobSeeker> getSeekerSet() {
-		return seekerSet;
+	public Set<JobSeeker> getInterestSet() {
+		return interestSet;
 	}
 
-	public void setSeekerSet(Set<JobSeeker> seekerSet) {
-		this.seekerSet = seekerSet;
+	public void setInterestSet(Set<JobSeeker> interestSet) {
+		this.interestSet = interestSet;
+	}
+	
+	public Set<Application> getApplicationSet() {
+		return applicationSet;
+	}
+
+	public void setSeekerSet(Set<Application> applicationSet) {
+		this.applicationSet = applicationSet;
 	}
 
 	public Long getpID() {
 		return pID;
 	}	
-	public JSONObject getJSON() throws JSONException{
+	public String getJSON(){
 		
-		JSONObject result = new JSONObject();
-		result.put("pid", getpID());
-		result.put("title", getTitle());
-		result.put("description", getDescription());
-		result.put("responsibility", getResponsibility());
-		result.put("office location", getOfficeLocation());
-		result.put("salary", getSalary());
-		result.put("status", getStatus());
-		
-		
-		return result;
+		try{
+			JSONObject result = new JSONObject();
+			result.put("pid", getpID());
+			result.put("title", getTitle());
+			result.put("description", getDescription());
+			result.put("responsibility", getResponsibility());
+			result.put("office location", getOfficeLocation());
+			result.put("salary", getSalary());
+			result.put("status", getStatus());
+			return result.toString();
+		}
+		catch(JSONException e){
+			return e.toString();
+		}
 	}
+
 	
 }
