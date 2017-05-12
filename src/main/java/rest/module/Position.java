@@ -30,6 +30,15 @@ import org.json.*;
 @JsonRootName(value = "Position")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Position {
+	public Position(String pTitle,String pDesciption,String responsibility,String officeLocation,Long salary){
+		this.setDescription(pDesciption);
+		this.setResponsibility(responsibility);
+		this.setOfficeLocation(officeLocation);
+		this.setSalary(salary);
+		this.setStatus("open");//initial state
+		this.setInterestSet(new HashSet<JobSeeker>());
+		this.setSeekerSet(new HashSet<Application>());
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "PID")

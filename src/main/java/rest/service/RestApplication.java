@@ -4,11 +4,24 @@ import java.util.Set;
 
 import rest. module.*;
 import rest.repo.ApplicationRepo;
+import rest.repo.CompanyRepo;
+import rest.repo.JobSeekerRepo;
+import rest.repo.PositionRepo;
 
 public  class RestApplication {
 	//For any status change of an application, the job seeker receives an email update as well
-	static private ApplicationRepo applicationRepo;
-	static Application createApplication(JobSeeker jobSeeker,String sEmail,String sFirstName,String sLastName, Position position, String resumeURL){
+	private JobSeekerRepo repo_jobseeker;
+	private CompanyRepo repo_company;
+	private ApplicationRepo repo_application;
+	private PositionRepo repo_position;
+	
+	public RestApplication(JobSeekerRepo repo_jobseeker, CompanyRepo repo_company, ApplicationRepo repo_application, PositionRepo repo_position){
+		this.repo_jobseeker = repo_jobseeker;
+		this.repo_company = repo_company;
+		this.repo_application = repo_application;
+		this.repo_position = repo_position;
+	} 	
+	Application createApplication(JobSeeker jobSeeker,String sEmail,String sFirstName,String sLastName, Position position, String resumeURL){
 		/*para: 
 		sID:   job seeker id
 		sEmail: email same with sID
@@ -25,21 +38,14 @@ public  class RestApplication {
 			//authorization result for create new application is: not allowed
 			return application;
 		}
-		application = new Application();
-		application.setJobSeeker(jobSeeker);
-		application.setEmail(sEmail);
-		application.setFirstName(sFirstName);
-		application.setLastName(sLastName);
-		application.setPosition(position);
-		application.setStatus("pending");//initial status(pending)
+		application = new Application(jobSeeker, sEmail, sFirstName, sLastName, position, resumeURL);
 		
 		notificationSeeker(jobSeeker, application.getStatus());
 		
-		application.setResumeUrl(resumeURL);
-		return applicationRepo.save(application);// with new generate aID.
+		return repo_application.save(application);// with new generate aID.
 	}
 	
-	static private boolean generateAuthorization(JobSeeker jobSeeker, Position position) {
+	 private boolean generateAuthorization(JobSeeker jobSeeker, Position position) {
 		// TODO Auto-generated method stub
 		if(jobSeeker.getApplicationSet().size() > 5){
 			return false;
@@ -48,7 +54,7 @@ public  class RestApplication {
 		//"pending", "Offered"
 		nonTerminalStates.add("pending");
 		nonTerminalStates.add("Offered");
-		for(Application application: applicationRepo.findAll()){
+		for(Application application: repo_application.findAll()){
 			//find application with same jobSeeker & position
 			if(application.getJobSeeker().equals(jobSeeker)&& application.getPosition().equals(position)){
 				if(nonTerminalStates.contains(application.getStatus())){
@@ -60,13 +66,13 @@ public  class RestApplication {
 		return true;
 	}
 
-	static Application getApplication(Long aID){
-		Application application = applicationRepo.findOne(aID);
+	 Application getApplication(Long aID){
+		Application application = repo_application.findOne(aID);
 		return application;
 	}
-	static Application updateApplication(Long aID, String newStatus){
+	 Application updateApplication(Long aID, String newStatus){
 		//to change application status
-		Application application = applicationRepo.findOne(aID);
+		Application application = repo_application.findOne(aID);
 		if(newStatus.equals("Cancelled")){
 			if(application.getStatus().equals("OfferAccepted")){
 				//12.ii
@@ -80,23 +86,23 @@ public  class RestApplication {
 		return application;
 		
 	}
-	static void updateApplications(Set<Long> aIDs){
+	 void updateApplications(Set<Long> aIDs){
 		//status==cancel
 		//seeker cancel applications,Set<Application>  user can cancel one or more applications
 		for(Long aID : aIDs){
-			Application application = applicationRepo.findOne(aID);
+			Application application = repo_application.findOne(aID);
 			application.setStatus("Cancelled");
-			applicationRepo.save(application);
+			repo_application.save(application);
 			//TODO email update the application's jobseeker
 			notificationSeeker(application.getJobSeeker(), "Cancelled");
 		}
 		//cancel more than one application, no returns
 	}
-	static Boolean deleteApplication(Long aID){
-		Application application = applicationRepo.findOne(aID);
+	public Boolean deleteApplication(Long aID){
+		Application application = repo_application.findOne(aID);
 		if(application!=null){
 			try{
-				applicationRepo.delete(application);
+				repo_application.delete(application);
 			}catch(Exception e){
 				//fail delete
 				return false;
@@ -105,7 +111,7 @@ public  class RestApplication {
 		}
 		return false;
 	}
-	static void notificationSeeker(JobSeeker jobSeeker, String status){
+	public void notificationSeeker(JobSeeker jobSeeker, String status){
 		//listen function, listen to the changes of itself and notify its seekerSet
 		//TODO
 	}
