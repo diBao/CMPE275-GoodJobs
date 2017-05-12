@@ -124,9 +124,9 @@ public class RestJobSeeker {
 			set_p.add(position);
 			jobseeker.setInterestSet(set_p);
 			
-			Set<JobSeeker> set_j = position.getSeekerSet();
+			Set<JobSeeker> set_j = position.getInterestSet();
 			set_j.add(jobseeker);
-			position.setSeekerSet(set_j);
+			position.setInterestSet(set_j);
 
 			repo_jobseeker.save(jobseeker);
 			repo_position.save(position);
@@ -150,9 +150,9 @@ public class RestJobSeeker {
 			set_p.remove(position);
 			jobseeker.setInterestSet(set_p);
 			
-			Set<JobSeeker> set_j = position.getSeekerSet();
+			Set<JobSeeker> set_j = position.getInterestSet();
 			set_j.remove(jobseeker);
-			position.setSeekerSet(set_j);
+			position.setInterestSet(set_j);
 
 			repo_jobseeker.save(jobseeker);
 			repo_position.save(position);
@@ -164,10 +164,10 @@ public class RestJobSeeker {
 		}
 	}
 	
-	public String apply_position(Long id, String position){
-		
+	public String retrieve_all_applications(Long id){
 		
 		
 		return "";
 	}
+
 }

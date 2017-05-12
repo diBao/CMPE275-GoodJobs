@@ -28,9 +28,6 @@ import org.json.*;
 
 @Entity
 @Table(name="JobSeeker")
-//@XmlRootElement
-@JsonRootName(value = "JobSeeker")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JobSeeker {
 	
 	public JobSeeker(String firstName, String lastName, String picture, String selfIntroduction, 

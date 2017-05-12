@@ -34,7 +34,7 @@ public class RestCompany {
 		}
 	}
 	
-	public String read_company(Long id){
+	public String retrieve_company(Long id){
 		Company company = repo_company.findById(id);
 		if(company != null){
 			return company.getJSON();
@@ -45,17 +45,51 @@ public class RestCompany {
 		}		
 	}
 	
-	public String update_company(Long id, String name, String website, String logoImageUrl, String address, String email, String description, String password){
+	public String update_company(Long id, String name, String website, String logoImageUrl, String address, String email, String description,
+			String password){
+		Company company = repo_company.findById(id);
+		if(company == null){
+			return "No Company found";
+		}
+		
+		if(name != null){
+			company.setCompanyName(name);
+		}
+		if(website != null){
+			company.setWebsite(website);
+		}
+		if(logoImageUrl != null){
+			company.setLogoImageUrl(logoImageUrl);
+		}
+		if(address != null){
+			company.setAddress(address);
+		}
+		if(email != null){
+			company.setEmail(email);
+		}
+		if(description != null){
+			company.setDescription(description);
+		}
+		if(password != null){
+			company.setPassword(password);
+		}
+				
+		try {
+        	repo_company.save(company);
+        } catch (Exception e) {
+        	return "Company update failed";
+        }
+		
+		return company.getJSON();		
+	}
+	
+	
+	public String retrieve_positions(Long id, String status){
 		
 		return "";
 	}
-	
-	public String search_company(Long id, String filter){
-		return "";
-	}
-	
-	
+	/*
 	public String delete_company(){
 		return "";
-	}
+	}*/
 }

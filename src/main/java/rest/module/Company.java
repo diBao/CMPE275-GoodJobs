@@ -27,9 +27,6 @@ import org.json.*;
 
 @Entity
 @Table(name="Company")
-//@XmlRootElement
-@JsonRootName(value = "Company")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Company {
 	
 	public Company(String name, String website, String logoImageUrl, 
