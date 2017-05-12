@@ -165,7 +165,7 @@ public class Company {
 				positionArray[count] = position;
 				count++;
 			}
-			positions.put("passenger",  positionArray);
+			positions.put("position",  positionArray);
 			
 			result.put("positions", positions);
 			return result.toString();
