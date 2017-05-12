@@ -43,7 +43,7 @@ public class Company {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "CID")
-	private Long cID;
+	private long cID;
 	
 	@Column(name = "COMPANY_NAME", nullable = false)
 	private String companyName;

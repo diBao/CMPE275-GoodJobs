@@ -44,7 +44,7 @@ public class Application {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "AID")
-	private Long aID;
+	private long aID;
 	
 	@ManyToOne(targetEntity = JobSeeker.class, fetch = FetchType.LAZY)
 	private JobSeeker jobSeeker;
@@ -140,7 +140,7 @@ public class Application {
 
 			JobSeeker jobseekerObj = getJobSeeker();
 			JSONObject jobseeker = new JSONObject();
-			jobseeker.put("capacity", jobseekerObj.getSID());
+			jobseeker.put("sid", jobseekerObj.getsID());
 			jobseeker.put("first name", jobseekerObj.getFirstName());
 			jobseeker.put("last name", jobseekerObj.getLastName());
 			jobseeker.put("picture", jobseekerObj.getPicture());

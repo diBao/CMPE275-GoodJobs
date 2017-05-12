@@ -42,7 +42,7 @@ public class Position {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "PID")
-	private Long pID;
+	private long pID;
 	
 	@Column(name = "TITLE", nullable = false)
 	private String title;
