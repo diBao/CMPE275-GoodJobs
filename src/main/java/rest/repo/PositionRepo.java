@@ -7,5 +7,5 @@ import rest.module.Position;
 
 public interface PositionRepo extends CrudRepository<Position, Long>{
 
-	Position findById(Long pID);
+	Position findBypID(Long pID);
 }

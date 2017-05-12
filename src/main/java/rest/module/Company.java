@@ -27,9 +27,6 @@ import org.json.*;
 
 @Entity
 @Table(name="Company")
-//@XmlRootElement
-@JsonRootName(value = "Company")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Company {
 	
 	public Company(String name, String website, String logoImageUrl, 
@@ -46,7 +43,7 @@ public class Company {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "CID")
-	private Long cID;
+	private long cID;
 	
 	@Column(name = "COMPANY_NAME", nullable = false)
 	private String companyName;
@@ -168,7 +165,7 @@ public class Company {
 				positionArray[count] = position;
 				count++;
 			}
-			positions.put("passenger",  positionArray);
+			positions.put("position",  positionArray);
 			
 			result.put("positions", positions);
 			return result.toString();

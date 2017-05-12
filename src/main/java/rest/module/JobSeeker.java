@@ -28,10 +28,11 @@ import org.json.*;
 
 @Entity
 @Table(name="JobSeeker")
-//@XmlRootElement
-@JsonRootName(value = "JobSeeker")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JobSeeker {
+	
+	public JobSeeker(){
+		
+	}
 	
 	public JobSeeker(String firstName, String lastName, String picture, String selfIntroduction, 
 			String workExperience, String education, String skills, String email, String password){
@@ -49,7 +50,7 @@ public class JobSeeker {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "SID")
-	private Long sID;
+	private long sID;
 	
 	@Column(name = "FIRST_NAME", nullable = false)
 	private String firstName;
@@ -86,10 +87,10 @@ public class JobSeeker {
 	@OneToMany(targetEntity = Position.class, fetch = FetchType.LAZY)
 	private Set<Application> applicationSet = new HashSet<Application>();
 
-	public long getSID() {
+	public long getsID() {
 		return sID;
 	}
-
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -181,7 +182,7 @@ public class JobSeeker {
 		
 		try{
 			JSONObject result = new JSONObject();
-			result.put("capacity", getSID());
+			result.put("sid", getsID());
 			result.put("first name", getFirstName());
 			result.put("last name", getLastName());
 			result.put("picture", getPicture());

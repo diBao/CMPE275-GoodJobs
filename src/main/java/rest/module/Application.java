@@ -32,10 +32,19 @@ import org.json.*;
 @JsonRootName(value = "Application")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Application {
+	public Application(JobSeeker jobSeeker,String sEmail,String sFirstName,String sLastName, Position position, String resumeURL){
+		this.setJobSeeker(jobSeeker);
+		this.setEmail(sEmail);
+		this.setFirstName(sFirstName);
+		this.setLastName(sLastName);
+		this.setPosition(position);
+		this.setStatus("pending");//initial status(pending)
+		this.setResumeUrl(resumeURL);
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "AID")
-	private Long aID;
+	private long aID;
 	
 	@ManyToOne(targetEntity = JobSeeker.class, fetch = FetchType.LAZY)
 	private JobSeeker jobSeeker;
@@ -131,7 +140,7 @@ public class Application {
 
 			JobSeeker jobseekerObj = getJobSeeker();
 			JSONObject jobseeker = new JSONObject();
-			jobseeker.put("capacity", jobseekerObj.getSID());
+			jobseeker.put("sid", jobseekerObj.getsID());
 			jobseeker.put("first name", jobseekerObj.getFirstName());
 			jobseeker.put("last name", jobseekerObj.getLastName());
 			jobseeker.put("picture", jobseekerObj.getPicture());
