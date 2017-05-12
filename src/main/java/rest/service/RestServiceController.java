@@ -177,11 +177,10 @@ public class RestServiceController {
     //retrieve all positions from company
     @RequestMapping(
 			value = "/company/{id}", 
-			params= "status",
 			method = RequestMethod.GET)
 	public @ResponseBody String retrievePositions(
 			@PathVariable Long id,
-			@RequestParam("status") String status
+			@RequestParam(value = "status", required = false) String status
 			) {
 		RestCompany rest_company = new RestCompany(repo_jobseeker, repo_company, repo_application, repo_position);
 		return rest_company.retrieve_positions(id, status);
