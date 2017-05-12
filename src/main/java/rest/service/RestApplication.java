@@ -54,12 +54,19 @@ public  class RestApplication {
 		//"pending", "Offered"
 		nonTerminalStates.add("pending");
 		nonTerminalStates.add("Offered");
-		for(Application application: repo_application.findAll()){
+		/*original find version
+		 * for(Application application: repo_application.findAll()){
 			//find application with same jobSeeker & position
 			if(application.getJobSeeker().equals(jobSeeker)&& application.getPosition().equals(position)){
 				if(nonTerminalStates.contains(application.getStatus())){
 					return false;
 				}
+			}
+		}*/
+		//find version two
+		for(Application application:repo_application.findApplicationByJobSeekerAndPosition(jobSeeker, position)){
+			if(nonTerminalStates.contains(application.getStatus())){
+				return false;
 			}
 		}
 		//all previous same application exams are passed

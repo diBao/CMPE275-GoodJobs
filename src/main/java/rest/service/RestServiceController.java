@@ -186,124 +186,134 @@ public class RestServiceController {
 		return rest_company.retrieve_positions(id, status);
 	}
   
-//    
-//    /*******************
-//     * Position
-//     ***************/
-//    //create position
-//    @RequestMapping(value="/position", method=RequestMethod.POST)
-//    public  @ResponseBody String createPosition(
-//    		@RequestParam("title") String title,
-//    		@RequestParam("description") String description,
-//    		@RequestParam("responsibilities") String responsibilities,
-//    		@RequestParam("officelocation") String officeLocation,
-//    		@RequestParam("salary") Long salary
-//    		) { 
-//		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
-//		return rest_position.create_position(title, description, responsibilities, officeLocation, salary);
-//    }
-//    
-//    //company update position
-//    @RequestMapping(value="/position/{id}", method=RequestMethod.PUT)
-//    public  @ResponseBody String updatePosition(
-//    		@PathVariable Long id,
-//    		@RequestParam(value = "cid") Long cID,
-//    		@RequestParam(value = "title", required = false) String title,
-//    		@RequestParam(value = "description", required = false) String description,
-//    		@RequestParam(value = "responsibilities", required = false) String responsibilities,
-//    		@RequestParam(value = "officelocation", required = false) String officeLocation,
-//    		@RequestParam(value = "salary", required = false) Long salary,
-//    		@RequestParam(value = "status", required = false) String status
-//    		) { 
-//		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
-//		return rest_position.update_position(id, cID, title, description, responsibilities, officeLocation, salary, status);
-//    }
-//    
-//    //jobseeker search positions
-//    @RequestMapping(value="/position", method=RequestMethod.GET)
-//    public  @ResponseBody String searchPosition(
-//    		@RequestParam("title") String[] title,
-//    		@RequestParam("companyname") String[] companyName,
-//    		@RequestParam("skill") String[] skill,
-//    		@RequestParam(value = "salarystart", required = false) Long salaryStart,
-//    		@RequestParam(value = "salaryend", required = false) Long salaryEnd,
-//    		@RequestParam(value = "location", required = false) String[] location
-//    		) { 
-//		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
-//		return rest_position.search_position(title, companyName, skill, salaryStart, salaryEnd, location);
-//    }
-//    
-//    //retrieve one position
-//    @RequestMapping(value="/position/{id}", method=RequestMethod.GET)
-//    public  @ResponseBody String retrievePosition(
-//    		@PathVariable Long id
-//    		) { 
-//		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
-//		return rest_position.retrieve_position(id);
-//    }   		
-//
-//      
-//    /*************
-//     *  Application
-//     *************/
-//    //retrieve one application
-//    @RequestMapping(
-//			value = "/application/{id}", 
-//			method = RequestMethod.GET)
-//	public @ResponseBody String retrieveApplication(@PathVariable Long id) {
-//		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
-//		return rest_application.retrieve_application(id);
-//	}
-//    
-//    //create application
-//    @RequestMapping(
-//			value = "/application", 
-//			method = RequestMethod.POST)
-//	public @ResponseBody String applyApplication(
-//			@RequestParam("sid") Long sID,
-//			@RequestParam("pid") Long pID,
-//			@RequestParam(value = "resumeUrl", required = false) String resumeUrl
-//			) {
-//    	
-//		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
-//		return rest_application.create_application(sID, pID, resumeUrl);
-//	}
-//    
-//    //jobseeker update application (for multiple applications)
-//    @RequestMapping(
-//			value = "/application", 
-//			method = RequestMethod.PUT)
-//	public @ResponseBody String updateApplication(
-//			@RequestParam("sid") Long sID,
-//			@RequestParam("aid") Long[] aID,
-//			@RequestParam("reply") String reply
-//			) {
-//		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
-//		return rest_application.update_application(sID, aID, reply);
-//	}
-//    
-//    //company cancel application
-//    @RequestMapping(
-//			value = "/application", 
-//			method = RequestMethod.PUT)
-//	public @ResponseBody String cancelApplication(
-//			@RequestParam("cid") Long cID,
-//			@RequestParam("aid") Long aID,
-//			@RequestParam("reply") String reply
-//			) {
-//		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
-//		return rest_application.cancel_application(cID, aID, reply);
-//	}
-//    
-//  //jobseeker accept or reject application
-//    @RequestMapping(
-//			value = "/application/{id}", 
-//			method = RequestMethod.PUT)
-//	public @ResponseBody String accRejApplication(
-//			@RequestParam("sid") Long sID,
-//			@RequestParam("reply") String reply
-//			) {
-//		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
-//		return rest_application.acc_rej_application(sID, reply);
-//	}
+    /*******************
+     * Position
+     ***************/
+    //create position
+    @RequestMapping(value="/position", method=RequestMethod.POST)
+    public  @ResponseBody String createPosition(
+    		@RequestParam("title") String title,
+    		@RequestParam("description") String description,
+    		@RequestParam("responsibilities") String responsibilities,
+    		@RequestParam("officelocation") String officeLocation,
+    		@RequestParam("salary") Long salary
+    		) { 
+		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_position.createPosition(title, description, responsibilities, officeLocation, salary).getJSON();
+    }
+    
+    //company update position
+    @RequestMapping(value="/position/{id}", method=RequestMethod.PUT)
+    public  @ResponseBody String updatePosition(
+    		@PathVariable Long id,
+    		@RequestParam(value = "cid") Long cID,
+    		@RequestParam(value = "title", required = false) String title,
+    		@RequestParam(value = "description", required = false) String description,
+    		@RequestParam(value = "responsibilities", required = false) String responsibilities,
+    		@RequestParam(value = "officelocation", required = false) String officeLocation,
+    		@RequestParam(value = "salary", required = false) Long salary,
+    		@RequestParam(value = "status", required = false) String status
+    		) { 
+		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
+		//return rest_position.updatePosition(id, cID, title, description, responsibilities, officeLocation, salary, status);
+		return rest_position.updatePosition(id, title, description, responsibilities, officeLocation, salary, status).getJSON();
+    }
+    
+    //jobseeker search positions
+    @RequestMapping(value="/position", method=RequestMethod.GET)
+    public  @ResponseBody String searchPosition(
+    		@RequestParam("title") String[] title,
+    		@RequestParam("companyname") String[] companyName,
+    		@RequestParam("skill") String[] skill,
+    		@RequestParam(value = "salarystart", required = false) Long salaryStart,
+    		@RequestParam(value = "salaryend", required = false) Long salaryEnd,
+    		@RequestParam(value = "location", required = false) String[] location
+    		) { 
+		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_position.searchPositions(title, companyName, skill, salaryStart, salaryEnd, location);
+    }
+    
+    //retrieve one position
+    @RequestMapping(value="/position/{id}", method=RequestMethod.GET)
+    public  @ResponseBody String retrievePosition(
+    		@PathVariable Long id
+    		) { 
+		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_position.getPosition(id).getJSON();
+    }   		
+
+      
+    /*************
+     *  Application
+     *************/
+    //retrieve one application
+    @RequestMapping(
+			value = "/application/{id}", 
+			method = RequestMethod.GET)
+	public @ResponseBody String retrieveApplication(@PathVariable Long id) {
+		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_application.getApplication(id).getJSON();
+	}
+    
+    //create application
+    @RequestMapping(
+			value = "/application", 
+			method = RequestMethod.POST)
+	public @ResponseBody String applyApplication(
+			@RequestParam("sid") Long sID,
+			@RequestParam("pid") Long pID,
+			@RequestParam(value = "resumeUrl", required = false) String resumeUrl
+			) {
+    	
+		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
+		JobSeeker jobSeeker = repo_jobseeker.findById(sID);
+		return rest_application.createApplication(jobSeeker, jobSeeker.getEmail(), jobSeeker.getFirstName(), jobSeeker.getLastName(), repo_position.findById(pID), resumeUrl).getJSON();
+	}
+    
+    //jobseeker update application (for multiple applications)
+    @RequestMapping(
+			value = "/application", 
+			method = RequestMethod.PUT)
+	public @ResponseBody String updateApplication(
+			@RequestParam("sid") Long sID,
+			@RequestParam("aid") Long[] aID,
+			@RequestParam("reply") String reply
+			) {
+		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
+		Set<Long> aIDs = new HashSet<Long>();
+		if(aID!=null&&aID.length!=0){
+			for(Long id: aID){
+				aIDs.add(id);
+			}
+		}
+		rest_application.updateApplications(aIDs);
+		return "multiple cancelled ok";
+		//return rest_application.update_application(sID, aID, reply);
+	}
+    
+    //company cancel application
+    @RequestMapping(
+			value = "/application", 
+			method = RequestMethod.PUT)
+	public @ResponseBody String cancelApplication(
+			@RequestParam("cid") Long cID,
+			@RequestParam("aid") Long aID,
+			@RequestParam("reply") String reply
+			) {
+		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_application.updateApplication(aID,reply).getJSON();
+	}
+    
+  //jobseeker accept or reject application which application?
+    @RequestMapping(
+			value = "/application/{id}", 
+			method = RequestMethod.PUT)
+	public @ResponseBody String accRejApplication(
+			//@RequestParam("sid") Long sID,
+			@RequestParam("sid") Long aID,
+			@RequestParam("reply") String reply
+			) {
+		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_application.updateApplication(aID, reply).getJSON();
+	}
 }
