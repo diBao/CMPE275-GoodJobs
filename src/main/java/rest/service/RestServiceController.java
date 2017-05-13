@@ -1,6 +1,8 @@
 package rest.service;
 
 import java.text.ParseException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import rest.module.JobSeeker;
 
 
 @RestController
@@ -218,7 +222,7 @@ public class RestServiceController {
 		//return rest_position.updatePosition(id, cID, title, description, responsibilities, officeLocation, salary, status);
 		return rest_position.updatePosition(id, title, description, responsibilities, officeLocation, salary, status).getJSON();
     }
-    
+    /*
     //jobseeker search positions
     @RequestMapping(value="/position", method=RequestMethod.GET)
     public  @ResponseBody String searchPosition(
@@ -231,7 +235,7 @@ public class RestServiceController {
     		) { 
 		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
 		return rest_position.searchPositions(title, companyName, skill, salaryStart, salaryEnd, location);
-    }
+    }*/
     
     //retrieve one position
     @RequestMapping(value="/position/{id}", method=RequestMethod.GET)
@@ -266,7 +270,7 @@ public class RestServiceController {
 			) {
     	
 		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
-		JobSeeker jobSeeker = repo_jobseeker.findById(sID);
+		JobSeeker jobSeeker = repo_jobseeker.findOne(sID);
 		return rest_application.createApplication(jobSeeker, jobSeeker.getEmail(), jobSeeker.getFirstName(), jobSeeker.getLastName(), repo_position.findById(pID), resumeUrl).getJSON();
 	}
     

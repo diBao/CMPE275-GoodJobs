@@ -1,5 +1,8 @@
 package rest.repo;
 
+import java.util.Set;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import rest.module.JobSeeker;
@@ -7,7 +10,7 @@ import rest.module.Position;
 
 public interface PositionRepo extends CrudRepository<Position, Long>{
 
-	Position findBypID(Long pID);
+	Position findById(Long pID);
 
 	//Set<Position> findByCompanyName(String companyName); directly use companyRepo
 	
