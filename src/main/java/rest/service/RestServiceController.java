@@ -17,18 +17,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rest.module.JobSeeker;
-
+import rest.repo.*;
 
 @RestController
 public class RestServiceController {  
     @Autowired
-    private rest.repo.CompanyRepo repo_company;
+    private CompanyRepo repo_company;
     @Autowired
-    private rest.repo.ApplicationRepo repo_application;
+    private ApplicationRepo repo_application;
     @Autowired
-    private rest.repo.PositionRepo repo_position;
+    private PositionRepo repo_position;
     @Autowired
-    private rest.repo.JobSeekerRepo repo_jobseeker;
+    private JobSeekerRepo repo_jobseeker;
 	
 	/*******************
 	 * JobSeeker
@@ -196,6 +196,7 @@ public class RestServiceController {
     //create position
     @RequestMapping(value="/position", method=RequestMethod.POST)
     public  @ResponseBody String createPosition(
+    		@RequestParam("cid") Long cID,
     		@RequestParam("title") String title,
     		@RequestParam("description") String description,
     		@RequestParam("responsibilities") String responsibilities,
@@ -203,7 +204,7 @@ public class RestServiceController {
     		@RequestParam("salary") Long salary
     		) { 
 		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_position.createPosition(title, description, responsibilities, officeLocation, salary).getJSON();
+		return rest_position.createPosition(cID, title, description, responsibilities, officeLocation, salary).getJSON();
     }
     
     //company update position
@@ -271,12 +272,13 @@ public class RestServiceController {
     	
 		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
 		JobSeeker jobSeeker = repo_jobseeker.findOne(sID);
-		return rest_application.createApplication(jobSeeker, jobSeeker.getEmail(), jobSeeker.getFirstName(), jobSeeker.getLastName(), repo_position.findById(pID), resumeUrl).getJSON();
+		// TODO Error Message Application == null
+		return rest_application.createApplication(jobSeeker, jobSeeker.getEmail(), jobSeeker.getFirstName(), jobSeeker.getLastName(), repo_position.findBypID(pID), resumeUrl).getJSON();
 	}
     
     //jobseeker update application (for multiple applications)
     @RequestMapping(
-			value = "/application", 
+			value = "/application/jobseeker", 
 			method = RequestMethod.PUT)
 	public @ResponseBody String updateApplication(
 			@RequestParam("sid") Long sID,
@@ -297,7 +299,7 @@ public class RestServiceController {
     
     //company cancel application
     @RequestMapping(
-			value = "/application", 
+			value = "/application/company", 
 			method = RequestMethod.PUT)
 	public @ResponseBody String cancelApplication(
 			@RequestParam("cid") Long cID,
@@ -313,11 +315,11 @@ public class RestServiceController {
 			value = "/application/{id}", 
 			method = RequestMethod.PUT)
 	public @ResponseBody String accRejApplication(
-			//@RequestParam("sid") Long sID,
-			@RequestParam("sid") Long aID,
+			@PathVariable Long id, // application ID
+			@RequestParam("sid") Long sID,
 			@RequestParam("reply") String reply
 			) {
 		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_application.updateApplication(aID, reply).getJSON();
+		return rest_application.updateApplication(sID, reply).getJSON();
 	}
 }

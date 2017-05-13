@@ -29,6 +29,10 @@ import org.json.*;
 @Table(name="Company")
 public class Company {
 	
+	public Company(){
+		
+	}
+	
 	public Company(String name, String website, String logoImageUrl, 
 			String address, String email, String description, String password){
 		this.setCompanyName(name);
@@ -38,6 +42,7 @@ public class Company {
 		this.setEmail(email);
 		this.setDescription(description);
 		this.setPassword(password);
+		this.setPositionSet(new HashSet<Position>());
 	}
 	
 	@Id

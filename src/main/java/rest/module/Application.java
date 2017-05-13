@@ -32,6 +32,11 @@ import org.json.*;
 @JsonRootName(value = "Application")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Application {
+	
+	public Application(){
+		
+	}
+	
 	public Application(JobSeeker jobSeeker,String sEmail,String sFirstName,String sLastName, Position position, String resumeURL){
 		this.setJobSeeker(jobSeeker);
 		this.setEmail(sEmail);

@@ -9,7 +9,7 @@ import rest.module.JobSeeker;
 import rest.module.Position;
 
 public interface ApplicationRepo  extends CrudRepository<Application, Long>{
-	public Application findById(Long aID);
+	public Application findByaID(Long aID);
 	//search by both jobSeeker and position
 	public Set<Application> findApplicationByJobSeekerAndPosition(JobSeeker jobSeeker,Position position);
 	public Set<Application> findByPosition(Position position);
