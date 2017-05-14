@@ -1,0 +1,88 @@
+<html>
+<% include include/head.html %>
+<link href="assets/css/login.css" rel="stylesheet" />
+<body ng-app="">
+<% if(locals.error){ %>
+    <p>
+    <br>
+    <h4><%= error %></h4>
+    <br>
+    </p>
+<% } %>
+
+<script>
+</script>
+<div class="" id="myModal">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content account-wall">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+            <br>
+                <h1 class="text-center">Sign up</h1>
+                <div class="" >
+                    <form class="form-signin" action="/register" method="post">
+                        <input ng-show="content == 'user'" type="text" class="form-control" name="firstname" placeholder="First Name" > <!-- required autofocus -->
+                        <input ng-show="content == 'user'"  type="text" class="form-control" name="lastname" placeholder="Last Name" >  <!-- required -->
+                        <input ng-show="content == 'company'" type="text" class="form-control" name="name" placeholder="Company Name" > <!-- required autofocus -->
+                        <input type="text" class="form-control" name="username" placeholder="Email" required>
+                        <input type="password" name="password" class="form-control" placeholder="Password" required>
+                        <input type="password" class="form-control" placeholder="Confirm Password" required>
+                        <button class="btn btn-lg btn-fill btn-info btn-block" type="submit">Sign up</button>
+                        
+                        <div class="row">
+                            <div class="pull-left" >
+                                <!-- <input ng-model="subscription.checked" ng-click="updateSelection(0)" type="checkbox">Job Seeker
+                                <input ng-model="subscription.checked" ng-click="updateSelection(1)" type="checkbox">Company -->
+
+                                <!-- <input type="checkbox" ng-checked="type=='user'" ng-true-value="'user'" ng-model="type">Job Seeker
+                                <input type="checkbox" ng-checked="type=='company'" ng-true-value="'company'" ng-model="type">Company
+                                {{type}} -->
+                                <ng-form name="form1">
+                                <input id="SSS" type="radio" name="type" value="user" ng-model="content" required checked="checked">
+                                Job Seeker
+                                </ng-form>
+                                <br>
+                                <ng-form name="form2">
+                                <input type="radio" name="type" value="company" ng-model="content">
+                                Company
+                                </ng-form>
+
+                                <!-- <label for="first">Show first content</label>
+                                <input id="first" type="radio" name="content" ng-model="content" value="first">
+                                <br />
+                                <label for="other">Show other content</label>
+                                <input id="other" type="radio" name="content" ng-model="content" value="other">
+                                <div class="wrapper">
+                                  <p ng-show="content == 'first'">This is the first content!</p>
+                                  <h2 ng-show="content == 'other'">This is the other content!</h2>
+                                </div> -->
+                            </div>
+
+                            <a href="/login" class="pull-right new-account">Has an account?</a><span class="clearfix"></span>
+                        </div>
+                    </form>
+                </div>
+                <br>
+
+            </div>
+        </div>
+
+
+      
+      </div>
+    </div>
+  </div>
+
+
+
+</body>
+
+<script>
+// 
+
+
+</script>
+
+</html>

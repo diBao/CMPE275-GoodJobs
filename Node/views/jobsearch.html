@@ -59,10 +59,11 @@
                                 <table class="table table-hover"  ng-controller="myCtrl" ng-show="jobs.length > 0">
                                     <thead>
                                         <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Salary</th>
-                                        <th>Country</th>
-                                        <th>City</th>
+                                        <th>jobtitle</th>
+                                        <th>description</th>
+                                        <th>responsibility</th>
+                                        <th>officelocation</th>
+                                        <th>salary</th>
                                         <th></th>
                                     </thead>
                                     <tbody>
@@ -71,6 +72,7 @@
                                             <td>{{x.Name}}</td>
                                             <td>${{x.Salary}}</td>
                                             <td>{{x.Country}}</td>
+                                            <td>{{x.City}}</td>
                                             <td>{{x.City}}</td>
                                             <td><a href="jobdetail?jobId={{x.ID}}">More</a></td>
                                         </tr>

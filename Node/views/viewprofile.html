@@ -16,27 +16,31 @@
 
         <!-- Right main panel - content -->
         <div class="content">
-            <div class="container-fluid">
+            <div class="container-fluid" ng-controller="myCtrl">
+
                 <div class="row">
                     <div class="col-md-8">
                         <div class="card">
                             <div class="header">
                                 <h4 class="title">My Profile</h4>
                             </div>
+                            
                             <div class="content">
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <label>Company</label>
-                                                <!-- <input type="text" class="form-control" disabled placeholder="Company" value="Creative Code Inc."> -->
-                                                <p>ASUS</p>
+                                                <label>FirstName</label>
+                                                <p><% if(data.firstName) { %> 
+                                                     <%= data.firstName %> 
+                                                    <% } %></p>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Username</label>
-                                                <p>lucky20511</p>
-                                                <!-- <input type="text" class="form-control" placeholder="Username" value="lucky20511"> -->
+                                                <label>LastName</label>
+                                                <p><% if(data.lastName) { %> 
+                                                     <%= data.lastName %> 
+                                                    <% } %></p>
                                             </div>
                                         </div>
                                         
@@ -44,70 +48,54 @@
                                     <div class="row">
                                         <div class="col-md-8">
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Email address</label>
-                                                <p>lucky20511@gmail.com</p>
-                                                <!-- <input type="email" class="form-control" placeholder="Email" value="lucky20511@gmail.com"> -->
+                                                <label>Email</label>
+                                                <p><% if(data.email) { %> 
+                                                     <%= data.email %> 
+                                                    <% } %></p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-8">
                                             <div class="form-group">
-                                                <label>First Name</label>
-                                                <p>HsunFu</p>
-                                                <!-- <input type="text" class="form-control" placeholder="Company" value="Mike"> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Last Name</label>
-                                                <p>Liu</p>
-                                                <!-- <input type="text" class="form-control" placeholder="Last Name" value="Andrew"> -->
+                                                <label>Experience</label>
+                                                <p><% if(data.experience) { %> 
+                                                     <%= data.experience %> 
+                                                    <% } %></p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-8">
                                             <div class="form-group">
-                                                <label>Address</label>
-                                                <p>1314 Dryden Drive San Jose CA 95131</p>
-                                                <!-- <input type="text" class="form-control" placeholder="Home Address" value="1314 Dryden Drive San Jose CA 95131"> -->
+                                                <label>Education</label>
+                                                <p><% if(data.education) { %> 
+                                                     <%= data.education %> 
+                                                    <% } %></p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-8">
                                             <div class="form-group">
-                                                <label>City</label>
-                                                <p>San Jose</p>
-                                                <!-- <input type="text" class="form-control" placeholder="City" value="San Jose"> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Country</label>
-                                                <p>United State</p>
-                                                <!-- <input type="text" class="form-control" placeholder="Country" value="United State"> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Postal Code</label>
-                                                <p>95131</p>
-                                                <!-- <input type="number" class="form-control" placeholder="ZIP Code" value="95131"> -->
+                                                <label>Skills</label>
+                                                <p><% if(data.skill) { %> 
+                                                     <%= data.skill %> 
+                                                    <% } %></p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-8">
                                             <div class="form-group">
-                                                <label>About Me</label>
-                                                <p>George is a bitch</p>
-                                                <!-- <textarea rows="5" class="form-control" placeholder="Here can be your description">George is a bitch</textarea> -->
+                                                <label>Introduction</label>
+                                                <p><% if(data.introduction) { %> 
+                                                     <%= data.introduction %> 
+                                                    <% } %></p>
                                             </div>
                                         </div>
                                     </div>
@@ -125,20 +113,14 @@
                             <div class="content">
                                 <div class="author">
                                     <img class="avatar border-gray" src="assets/img/faces/face-g.jpg" alt="..."/>
-                                      <h4 class="title">HsunFu Liu </h4>
+                                      <h4 class="title"><%= data.firstName %> <%= data.lastName %> </h4>
                                 </div>
                                 <!-- <p class="description text-center"> "Lamborghini Mercy <br>
                                                     Your chick she so thirsty <br>
                                                     I'm in that two seat Lambo"
                                 </p> -->
                             </div>
-                            <!-- <hr>
-                            <div class="text-center">
-                                <button href="#" class="btn btn-simple"><i class="fa fa-facebook-square"></i></button>
-                                <button href="#" class="btn btn-simple"><i class="fa fa-twitter"></i></button>
-                                <button href="#" class="btn btn-simple"><i class="fa fa-google-plus-square"></i></button>
-
-                            </div> -->
+                            
                         </div>
                     </div>
 
@@ -155,6 +137,23 @@
 
 
 </body>
+
+<script>
+var app = angular.module('myApp', []);
+// app.config(function($httpProvider){
+//     $httpProvider.defaults.useXDomain = true;
+//     delete $httpProvider.defaults.headers.common['X-Requested-With'];
+// });
+app.controller('myCtrl', function($scope, $http) {
+    // var userName = <%= user.username %>;
+    // var url = "http://52.26.172.30:8080/jobseeker/"+userName;
+    // console.log(url);
+    // $http.get(url).success(function (response){
+    //         $scope.JobSeeker = response;
+    //     }
+    // );
+});
+</script>
 
 	<!-- <script type="text/javascript">
     	$(document).ready(function(){

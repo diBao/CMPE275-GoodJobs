@@ -20,7 +20,7 @@
 
         <!-- Right main panel - content -->
         <div class="content">
-            <div class="container-fluid">
+            <div class="container-fluid" ng-controller="myCtrl" ng-show="job">
                 <div class="row">
                     <div class="col-md-8">
                         <div class="card">
@@ -28,18 +28,22 @@
                                 <h4 class="title">Edit Profile</h4>
                             </div>
                             <div class="content">
-                                <form>
+                                <form action="editprofile" method="POST">
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <label>Company (disabled)</label>
-                                                <input type="text" class="form-control" disabled placeholder="Company" value="ASUS">
+                                                <label>First Name</label>
+                                                <input type="text" class="form-control" placeholder="firstname" name="firstname" <% if(data.firstName) { %> 
+                                                     value="<%= data.firstName %>"
+                                                    <% } %>">
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Username</label>
-                                                <input type="text" class="form-control" placeholder="Username" value="lucky20511">
+                                                <label>Last Name</label>
+                                                <input type="text" class="form-control" placeholder="lastname" name="lastname" <% if(data.lastName) { %> 
+                                                     value="<%= data.lastName %>"
+                                                    <% } %>">
                                             </div>
                                         </div>
                                         
@@ -47,65 +51,58 @@
                                     <div class="row">
                                         <div class="col-md-8">
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Email address</label>
-                                                <input type="email" class="form-control" placeholder="Email" value="lucky20511@gmail.com">
+                                                <label>Email</label>
+                                                <input type="text" class="form-control" disabled placeholder="email" name="email" <% if(data.email) { %> 
+                                                     value="<%= data.email %>"
+                                                    <% } %>">
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-8">
                                             <div class="form-group">
-                                                <label>First Name</label>
-                                                <input type="text" class="form-control" placeholder="Company" value="Mike">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Last Name</label>
-                                                <input type="text" class="form-control" placeholder="Last Name" value="Andrew">
+                                                <label>Experience</label>
+                                                <input type="text" class="form-control" placeholder="experience" name="experience" <% if(data.experience) { %> 
+                                                     value="<%= data.experience %>"
+                                                    <% } %>">
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-8">
                                             <div class="form-group">
-                                                <label>Address</label>
-                                                <input type="text" class="form-control" placeholder="Home Address" value="1314 Dryden Drive San Jose CA 95131">
+                                                <label>Education</label>
+                                                <input type="text" class="form-control" placeholder="education" name="education" <% if(data.education) { %> 
+                                                     value="<%= data.education %>"
+                                                    <% } %>">
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-8">
                                             <div class="form-group">
-                                                <label>City</label>
-                                                <input type="text" class="form-control" placeholder="City" value="San Jose">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Country</label>
-                                                <input type="text" class="form-control" placeholder="Country" value="United State">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Postal Code</label>
-                                                <input type="number" class="form-control" placeholder="ZIP Code" value="95131">
+                                                <label>Skills</label>
+                                                <input type="text" class="form-control" placeholder="skills" name="skills" <% if(data.skill) { %> 
+                                                     value="<%= data.skill %>"
+                                                    <% } %>">
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-8">
                                             <div class="form-group">
-                                                <label>About Me</label>
-                                                <textarea rows="5" class="form-control" placeholder="Here can be your description">LOLLLOLL LOLLL LOLLL LOLLLLLLLLL LOLOLOLOLOL</textarea>
+                                                <label>Introduction</label>
+                                                <input type="text" class="form-control" placeholder="introduction" name="introduction" <% if(data.introduction) { %> 
+                                                     value="<%= data.introduction %>"
+                                                    <% } %>">
                                             </div>
                                         </div>
                                     </div>
+
 
                                     <button type="submit" class="btn btn-info btn-fill pull-right">Update <i class="pe-7s-refresh"></i></button>
                                     <div class="clearfix"></div>
@@ -121,7 +118,7 @@
                             <div class="content">
                                 <div class="author">
                                     <img class="avatar border-gray" src="assets/img/faces/face-g.jpg" alt="..."/>
-                                      <h4 class="title">HsunFu Liu </h4>
+                                      <h4 class="title"><%= data.firstName %> <%= data.lastName %> </h4>
                                 </div>
 
                             </div>
@@ -143,7 +140,15 @@
 
 </body>
 
-   
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope, $http) {
+    $http.get("job").success(function (response){
+            $scope.job = response;
+        }
+    );
+});
+</script>
 
 	<!-- <script type="text/javascript">
     	$(document).ready(function(){

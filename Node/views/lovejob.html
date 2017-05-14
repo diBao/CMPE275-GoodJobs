@@ -32,10 +32,11 @@
                                 <table class="table table-hover" ng-controller="myCtrl" ng-show="jobs.length > 0">
                                     <thead>
                                         <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Salary</th>
-                                        <th>Country</th>
-                                        <th>City</th>
+                                        <th>jobtitle</th>
+                                        <th>description</th>
+                                        <th>responsibility</th>
+                                        <th>officelocation</th>
+                                        <th>salary</th>
                                         <th></th>
                                     </thead>
                                     <tbody>
@@ -45,7 +46,14 @@
                                             <td>${{x.Salary}}</td>
                                             <td>{{x.Country}}</td>
                                             <td>{{x.City}}</td>
-                                            <td><a href="">Apply Now<a></td>
+                                            <td>{{x.City}}</td>
+                                            <td>
+                                            <a href="">Apply Now
+                                            <a>
+                                            <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -73,7 +81,7 @@
 var app = angular.module('myApp', []);
 app.controller('myCtrl', function($scope, $http) {
 
-    //Loved joblist
+    // Get all marked positions with jobseeker id
     $http.get("joblist").success(function (response){
             $scope.jobs = response;
         }

@@ -1,0 +1,57 @@
+
+
+<nav class="navbar navbar-default navbar-fixed">
+    <div class="">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"><mark>GooDJobS</mark></a>
+        </div>
+        <div class="collapse navbar-collapse">
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                      <% if (locals.user) { %>
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <%= user.username %>
+                            <b class="caret"></b>
+                      </a>
+                      <%    if(user.type === 'user') { %>
+                      <ul class="dropdown-menu">
+                        <li><a href="viewprofile">View Profile</a></li>
+                        <li><a href="editprofile">Edit Profile</a></li>
+                      </ul>
+                      <%    } else if(user.type === 'company') { %>
+                      <ul class="dropdown-menu">
+                        <li><a href="viewcompany">View Company</a></li>
+                        <li><a href="editcompany">Edit Company</a></li>
+                      </ul>
+                      <%    } %>
+                      <% } %>
+                </li>
+                <li>
+                    <%if (!locals.user) { %>
+                      <a href="login" >
+                          Sign In
+                      </a>
+                    <% } else { %>
+                        <a href="logout">
+                          Log out
+                        </a>
+                    <% } %>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+<!-- 
+<a href="" data-toggle="modal" data-target="#myModal">
+    Sign In
+</a> -->

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<% include include/head.html %>
+<body ng-app="myApp">
+<!-- <% //include login.html %> -->
+<div class="wrapper">
+    <!-- Side bar -->
+    <!-- Side bar -->
+    <!-- Side bar -->
+    <% include include/sidebar_company.html %>
+    
+
+    <!-- Right main panel -->
+    <!-- Right main panel -->
+    <!-- Right main panel -->
+    <div class="main-panel">
+        <!-- Right main panel - navbar -->
+        <% include include/navbar.html %>
+
+
+        <!-- Right main panel - content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="text-muted"><i class="pe-7s-note2"></i> 
+                                Applicant
+                                <% if(!locals.params){ %>
+                                    =no ID=
+                                <% } else { %>
+                                     ==ID:<%= params %>
+                                     
+                                <% } %>
+                                </h4>
+                            </div>
+
+                            <div class="content table-responsive" ng-controller="myCtrl">
+
+                                <% if(!locals.params){ %>
+                                    <h1>no job ID</h1> <br> 
+                                    <%= params %>
+                                <% } else {%>
+
+                                <!-- TODO: check if AJAX can get the result -->
+                                <form ng-show="job">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>First Name</label>
+                                                <p>{{job.ID}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Last Name</label>
+                                                <label>Job Title</label>
+                                                <p>{{job.Country}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Introduction</label>
+                                                <p>{{job.Salary}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Experience</label>
+                                                <p>{{job.City}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Education</label>
+                                                <p>{{job.City}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Skills</label>
+                                                <p>{{job.City}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Email</label>
+                                                <p>{{job.City}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+
+                                <button ng-if="job.Status == 'Rejected'" class="btn btn-info btn-fill" onclick="">Offered</button>
+                                <button ng-if="job.Status == 'Offered'" class="btn btn-info btn-fill" onclick="">Rejected</button>
+
+
+
+                                <% } %>
+                                 <button class="btn btn-info btn-fill" onclick="goBack()">Go Back
+                                </button>
+
+                            </div>
+
+                              
+
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Right main panel - footer -->
+        <% include include/footer.html %>
+
+    </div>
+</div>
+
+
+</body>
+
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope, $http) {
+    $http.get("job").success(function (response){
+            $scope.job = response;
+        }
+    );
+});
+</script>
+	<!-- <script type="text/javascript">
+    	$(document).ready(function(){
+
+        	demo.initChartist();
+
+        	$.notify({
+            	icon: 'pe-7s-gift',
+            	message: "Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer."
+
+            },{
+                type: 'info',
+                timer: 4000
+            });
+
+    	});
+	</script> -->
+
+</html>

@@ -1,0 +1,36 @@
+<div class="sidebar" data-color="purple" data-image="">
+
+        <div class="sidebar-wrapper">
+            <div class="logo"> 
+            CMPE 275
+            </div>
+
+            <ul class="nav">
+                <% if(page === "mypost") {%>
+                <li class="active">
+                <% } else {%>
+                <li>
+                <% } %>
+                    <a href="mypost">
+                        <i class="pe-7s-note2"></i>
+                        <p>My Post</p>
+                    </a>
+                </li>
+                <% if(page === "jobpost") {%>
+                <li class="active">
+                <% } else {%>
+                <li>
+                <% } %>
+                    <% if(locals.user) {%>
+                    <a href="jobpost">
+                    <% } else { %>
+                    <a>
+                    <% } %>
+                        <i class="pe-7s-note"></i>
+                        <p>Job Post</p>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>

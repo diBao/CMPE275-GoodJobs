@@ -2,6 +2,11 @@ const express = require('express');
 const passport = require('passport');
 const Account = require('../models/account');
 const router = express.Router();
+const http = require('http');
+const request = require("request");
+const path = require("path");
+
+
 
 
 /*******************/
@@ -64,15 +69,67 @@ router.get('/jobpost', function (req, res) {
 	}
 });
 
+router.post('/editcompany', function (req, res) {
+	if(!req.user){
+		res.redirect('/');
+	}else if(req.user.type === 'user'){
+		res.redirect('/');
+	}else if(req.user.type === 'company'){
+
+
+
+		console.log(req.body)
+		var URL = "http://52.26.172.30:8080/company/"+req.user.username;
+		URL = URL + "?name=" + req.body.name;
+		URL = URL + "&website=" + req.body.website;
+		URL = URL + "&address=" + req.body.address;
+		URL = URL + "&description=" + req.body.description;
+
+	    console.log(URL);
+	    var ret_data;
+	    request({
+		  uri: URL,
+		  method: "PUT"
+		}, function(error, response, body) {
+		  	console.log(body);
+		  	ret_data = JSON.parse(body);
+		  	console.log(ret_data);
+
+		  	res.render('viewcompany', { 
+				user : req.user ,
+				page : 'viewcompany',
+				data : ret_data
+			});
+		});
+
+
+
+	}
+});
+
+
 router.get('/editcompany', function (req, res) {
 	if(!req.user){
 		res.redirect('/');
 	}else if(req.user.type === 'user'){
 		res.redirect('/');
 	}else if(req.user.type === 'company'){
-		res.render('editcompany', { 
-			user : req.user,
-			page : 'editcompany'
+		var URL = "http://52.26.172.30:8080/company/"+req.user.username;
+	    console.log(URL);
+	    var ret_data;
+	    request({
+		  uri: URL,
+		  method: "GET"
+		}, function(error, response, body) {
+		  	console.log(body);
+		  	ret_data = JSON.parse(body);
+		  	console.log(ret_data);
+
+		  	res.render('editcompany', { 
+				user : req.user ,
+				page : 'editcompany',
+				data : ret_data
+			});
 		});
 	}
 });
@@ -83,9 +140,23 @@ router.get('/viewcompany', function (req, res) {
 	}else if(req.user.type === 'user'){
 		res.redirect('/');
 	}else if(req.user.type === 'company'){
-		res.render('viewcompany', { 
-			user : req.user,
-			page : 'viewcompany'
+
+		var URL = "http://52.26.172.30:8080/company/"+req.user.username;
+	    console.log(URL);
+	    var ret_data;
+	    request({
+		  uri: URL,
+		  method: "GET"
+		}, function(error, response, body) {
+		  	console.log(body);
+		  	ret_data = JSON.parse(body);
+		  	console.log(ret_data);
+
+		  	res.render('viewcompany', { 
+				user : req.user ,
+				page : 'viewcompany',
+				data : ret_data
+			});
 		});
 	}
 });
@@ -155,13 +226,13 @@ router.get('/jobsearch', function (req, res) {
 	});
 });
 
-router.get('/myjob', function (req, res) {
+router.get('/myapplication', function (req, res) {
 	if(!req.user){
 		res.redirect('/');
 	}
-	res.render('myjob', { 
+	res.render('myapplication', { 
 		user : req.user ,
-		page : 'myjob'
+		page : 'myapplication'
 	});
 });
 
@@ -181,9 +252,56 @@ router.get('/editprofile', function (req, res) {
 	}else if(req.user.type === 'company'){
 		res.redirect('/');
 	}else if(req.user.type === 'user'){
-		res.render('editprofile', { 
-			user : req.user ,
-			page : 'editprofile'
+		var URL = "http://52.26.172.30:8080/jobseeker/"+req.user.username;
+	    console.log(URL);
+	    var ret_data;
+	    request({
+		  uri: URL,
+		  method: "GET"
+		}, function(error, response, body) {
+		  	console.log(body);
+		  	ret_data = JSON.parse(body);
+		  	console.log(ret_data);
+
+		  	res.render('editprofile', { 
+				user : req.user ,
+				page : 'editprofile',
+				data : ret_data
+			});
+		});
+	}
+});
+
+router.post('/editprofile', function (req, res) {
+	if(!req.user){
+		res.redirect('/');
+	}else if(req.user.type === 'company'){
+		res.redirect('/');
+	}else if(req.user.type === 'user'){
+		
+		console.log(req.body)
+		var URL = "http://52.26.172.30:8080/jobseeker/"+req.user.username;
+		URL = URL + "?firstname=" + req.body.firstname;
+		URL = URL + "&lastname=" + req.body.lastname;
+		URL = URL + "&selfintroduction=" + req.body.introduction;
+		URL = URL + "&workexperience=" + req.body.experience;
+		URL = URL + "&education=" + req.body.education;
+		URL = URL + "&skills=" + req.body.skills;
+	    console.log(URL);
+	    var ret_data;
+	    request({
+		  uri: URL,
+		  method: "PUT"
+		}, function(error, response, body) {
+		  	console.log(body);
+		  	ret_data = JSON.parse(body);
+		  	console.log(ret_data);
+
+		  	res.render('viewprofile', { 
+				user : req.user ,
+				page : 'viewprofile',
+				data : ret_data
+			});
 		});
 	}
 });
@@ -194,10 +312,24 @@ router.get('/viewprofile', function (req, res) {
 	}else if(req.user.type === 'company'){
 		res.redirect('/');
 	}else if(req.user.type === 'user'){
-		res.render('viewprofile', { 
-			user : req.user ,
-			page : 'viewprofile'
+		var URL = "http://52.26.172.30:8080/jobseeker/"+req.user.username;
+	    console.log(URL);
+	    var ret_data;
+	    request({
+		  uri: URL,
+		  method: "GET"
+		}, function(error, response, body) {
+		  	console.log(body);
+		  	ret_data = JSON.parse(body);
+		  	console.log(ret_data);
+
+		  	res.render('viewprofile', { 
+				user : req.user ,
+				page : 'viewprofile',
+				data : ret_data
+			});
 		});
+		
 	}
 });
 
@@ -253,6 +385,28 @@ router.post('/register', (req, res, next) => {
                 if (err) {
                     return next(err);
                 }
+                //HTTP REQUEST
+                if(req.body.type ==="user"){
+	                var URL = "http://52.26.172.30:8080"+"/jobseeker?firstname="+req.body.firstname+"&lastname="+req.body.lastname+"&email="+req.body.username+"&password="+req.body.password;
+	                console.log(URL);
+	                request({
+					  uri: URL,
+					  method: "POST"
+					}, function(error, response, body) {
+					  console.log(body);
+					});
+	             }else{ //req.body.type ==="company"
+	             	var URL = "http://52.26.172.30:8080"+"/company?name="+req.body.name+"&email="+req.body.username+"&password="+req.body.password;
+	                console.log(URL);
+	                request({
+					  uri: URL,
+					  method: "POST"
+					}, function(error, response, body) {
+					  console.log(body);
+					});
+
+	             }
+
                 res.redirect('login');
             });
         });
@@ -268,6 +422,30 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/login'
         if (err) {
             return next(err);
         }
+
+  //       console.log(req.session);
+  //       if(req.session.type === "user"){
+  //       	var URL = "http://52.26.172.30:8080/jobseeker/"+req.session.email;
+		//     console.log(URL);
+		//     request({
+		// 	  uri: URL,
+		// 	  method: "GET"
+		// 	}, function(error, response, body) {
+		// 	  console.log(body);
+		// 	  req.session = body;
+		// 	});
+		// }else{ // req.session.user.type === "company"
+		// 	var URL = "http://52.26.172.30:8080/company/"+req.session.email;
+		//     console.log(URL);
+		//     request({
+		// 	  uri: URL,
+		// 	  method: "GET"
+		// 	}, function(error, response, body) {
+		// 	  console.log(body);
+		// 	  req.session = body;
+		// 	});
+		// }
+  //       http://52.26.172.30:8080/jobseeker/{email}
         res.redirect('/');
     });
 });

@@ -1,0 +1,49 @@
+
+<html>
+<% include include/head.html %>
+ <link href="assets/css/login.css" rel="stylesheet" />
+<body>
+<% if(locals.error){ %>
+    <p>
+    <br>
+    <h4><%= error %></h4>
+    <br>
+    </p>
+<% } %>
+<div class="" id="myModal">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content account-wall">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+            <br>
+                <h1 class="text-center">Sign in</h1>
+                <div class="">
+                    <form class="form-signin" action="/login" method="post">
+                        <input type="text" class="form-control" name="username" placeholder="Email" required autofocus>
+                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                        <button class="btn btn-lg btn-info btn-fill btn-block" type="submit">
+                            Sign in</button>
+                        <div class="row">
+
+                            <a href="/register" class="pull-right new-account" >Create new account</a>
+                            <span class="clearfix"></span>
+                        </div>
+                    </form>
+                </div>
+                <br>
+
+            </div>
+        </div>
+
+
+      
+      </div>
+    </div>
+  </div>
+
+
+
+</body>
+</html>

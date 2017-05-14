@@ -1,0 +1,50 @@
+<div class="sidebar" data-color="purple" data-image="">
+
+        <div class="sidebar-wrapper">
+            <div class="logo"> 
+            CMPE 275
+            </div>
+
+            <ul class="nav">
+                <% if(page === "jobsearch") {%>
+                <li class="active">
+                <% } else {%>
+                <li>
+                <% } %>
+                    <a href="jobsearch">
+                        <i class="pe-7s-search"></i>
+                        <p>Job Search</p>
+                    </a>
+                </li>
+                <% if(page === "myapplication") {%>
+                <li class="active">
+                <% } else {%>
+                <li>
+                <% } %>
+                    <% if(locals.user) {%>
+                    <a href="myapplication">
+                    <% } else { %>
+                    <a>
+                    <% } %>
+                        <i class="pe-7s-note2"></i>
+                        <p>My Application</p>
+                    </a>
+                </li>
+                <% if(page === "lovejob") {%>
+                <li class="active">
+                <% } else {%>
+                <li>
+                <% } %>
+                    <% if(locals.user) {%>
+                    <a href="lovejob">
+                    <% } else { %>
+                    <a>
+                    <% } %>
+                        <i class="pe-7s-like"></i>
+                        <p>Love Job</p>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
