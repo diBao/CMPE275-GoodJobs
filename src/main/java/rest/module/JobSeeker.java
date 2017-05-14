@@ -64,13 +64,13 @@ public class JobSeeker {
 	@Column(name = "INTRODUCTION")
 	private String introduction;
 	
-	@Column(name = "EXPERIENCE", nullable = false)
+	@Column(name = "EXPERIENCE")
 	private String experience;
 	
-	@Column(name = "EDUCATION", nullable = false)
+	@Column(name = "EDUCATION")
 	private String education;
 	
-	@Column(name = "SKILLS", nullable = false)
+	@Column(name = "SKILLS")
 	private String skills;
 	
 	@Column(name = "EMAIL", nullable = false, unique = true)
