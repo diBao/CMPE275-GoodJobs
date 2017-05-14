@@ -32,15 +32,13 @@ public class RestPosition {
 		Company company = this.repo_company.findBycID(cID);
 		
 		Position position = new Position(company, pTitle, pDesciption, responsibility, officeLocation, salary);
-		System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-		System.out.println("SIZE IS: " + company.getPositionSet().size());
+		//System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+		//System.out.println("SIZE IS: " + company.getPositionSet().size());
 		Set<Position> position_set = company.getPositionSet();
 		position_set.add(position);
-		System.out.print("SIZE IS: " + company.getPositionSet().size());
+		//System.out.print("SIZE IS: " + company.getPositionSet().size());
 		company.setPositionSet(position_set);
-		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		repo_company.save(company);
-		System.out.println("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
 		return repo_position.save(position);
 	}
 	public Position getPosition(Long pID){
@@ -123,142 +121,169 @@ public class RestPosition {
 		//TODO
 	}
 	
-//	public Set<Position> searchPositions(String[] titles,String[] companyNames,String[] skills,Long salaryStart,Long salaryEnd,String[] locations){
-//		/*5. Job seekers can search for open job positions
-//		Search by text the user types in, which can be a job title, 
-//		a company name, a skill, a mix of them, or basically, any arbitrary piece of text. 
-//		A word in the text can be matched against any part of a job posting.
-//		
-//		Search by filters
-//		Company name (allow multiple)
-//		Location (city names, allow multiple)
-//		Salary range (can be a single value, an open range, or a close range)
-//		You can add more filters if you prefer. 
-//		 */
-//		boolean isMatched = false;
-//		Set<Position> searchResult = new HashSet<Position>();
-//		
-//		Set<Position> searchTitles = new HashSet<Position>();
-//		boolean titleMatch = true;
-//		if(titles!=null&&titles.length!=0){
-//			for(String title:titles){
-//				searchTitles.addAll(repo_position.findByTitle(title));
-//			}
-//		}else{
-//			titleMatch = false;
-//		}
-//		
-//		if(titleMatch){
-//			isMatched = true;
-//			searchResult.addAll(searchTitles);
-//		}
-//		
-//		Set<Position> searchCompanys = new HashSet<Position>();
-//		boolean companyMatch = true;
-//		if(companyNames!=null&&companyNames.length!=0){
-//			for(String companyName:companyNames){
-//				for(Company company: repo_company.findByCompanyName(companyName)){
-//					searchCompanys.addAll(company.getPositionSet());
-//				}
-//			}
-//		}else{
-//			companyMatch = false;
-//		}
-//		if(companyMatch){
-//			if(isMatched){
-//				for(Position position:searchResult){
-//					if(searchCompanys.contains(position)==false){
-//						searchResult.remove(position);
-//					}
-//				}
-//			}else{
-//				searchResult.addAll(searchCompanys);
-//			}
-//			isMatched = true;
-//			
-//		}
-//		Set<Position> searchSkills = new HashSet<Position>();
-//		boolean skillMatch = true;
-//		if(skills!=null&&skills.length!=0){
-//			for(String skill:skills){
-//				//searchSkills.addAll(repo_position.findBySkill(skill));
-//				for(Long pid: repo_position.findBySkill(skill)){
-//					searchSkills.add(repo_position.findBypID(pid));
-//				}
-//			}
-//		}else{
-//			skillMatch = false;
-//		}
-//		
-//		if(skillMatch){
-//			if(isMatched){
-//				for(Position position:searchResult){
-//					if(searchSkills.contains(position)==false){
-//						searchResult.remove(position);
-//					}
-//				}
-//			}else{
-//				searchResult.addAll(searchSkills);
-//			}
-//			isMatched = true;
-//			
-//		}
-//		Set<Position> searchLocations = new HashSet<Position>();
-//		boolean locationMatch = true;
-//		if(locations!=null&&locations.length!=0){
-//			for(String location:locations){
-//				searchLocations.addAll(repo_position.findByOfficeLocation(location));
-//			}
-//		}else{
-//			locationMatch = false;
-//		}
-//		if(locationMatch){
-//			if(isMatched){
-//				for(Position position:searchResult){
-//					if(searchLocations.contains(position)==false){
-//						searchResult.remove(position);
-//					}
-//				}
-//			}else{
-//				searchResult.addAll(searchLocations);
-//			}
-//			isMatched = true;
-//		}
-//		Set<Long> searchSalary = new HashSet<Long>();
-//		boolean salaryMatch = true;
-//		if(salaryStart==null&&salaryEnd==null){
-//			salaryMatch = false;
-//		}
-//		if(salaryStart==null&&salaryEnd!=null){
-//			searchSalary.addAll(repo_position.findByLessSalary(salaryEnd));
-//		}
-//		if(salaryEnd==null&&salaryStart!=null){
-//			searchSalary.addAll(repo_position.findByGreaterSalary(salaryStart));
-//		}
-//		if(salaryStart!=null&&salaryEnd!=null){
-//			if(salaryStart.equals(salaryEnd)){
-//				searchSalary.addAll(repo_position.findBySalary(salaryStart));
-//			}else{
-//				searchSalary.addAll(repo_position.findByCloseSalary(salaryStart, salaryEnd));
-//			}
-//		}
-//		if(salaryMatch){
-//			Set<Position> searchSalaried = new HashSet<Position>();
-//			for(Long pID:searchSalary){
-//				searchSalaried.add(repo_position.findBypID(pID));
-//			}
-//			
-//			if(isMatched){
-//				for(Position position:searchResult){
-//					if(searchSalaried.contains(position)==false){
-//						searchResult.remove(position);
-//					}
-//				}
-//			}else{
-//				searchResult.addAll(searchSalaried);
-//			}
-//		}
-//		return searchResult;
-//	}
+	public Set<Position> searchPositions(String[] titles,String[] companyNames,String[] skills,Long salaryStart,Long salaryEnd,String[] locations){
+		/*5. Job seekers can search for open job positions
+		Search by text the user types in, which can be a job title, 
+		a company name, a skill, a mix of them, or basically, any arbitrary piece of text. 
+		A word in the text can be matched against any part of a job posting.
+		
+		Search by filters
+		Company name (allow multiple)
+		Location (city names, allow multiple)
+		Salary range (can be a single value, an open range, or a close range)
+		You can add more filters if you prefer. 
+		 */
+		boolean isMatched = false;
+		Set<Position> searchResult = new HashSet<Position>();
+		Set<Position> tmpResult = new HashSet<Position>();
+		
+		Set<Position> searchTitles = new HashSet<Position>();
+		boolean titleMatch = true;
+		if(titles!=null&&titles.length!=0){
+			for(String title:titles){
+				searchTitles.addAll(repo_position.findByTitle(title));
+			}
+		}else{
+			titleMatch = false;
+		}
+		
+		if(titleMatch){
+			isMatched = true;
+			searchResult.addAll(searchTitles);
+		}
+		
+		Set<Position> searchCompanys = new HashSet<Position>();
+		boolean companyMatch = true;
+		if(companyNames!=null&&companyNames.length!=0){
+			for(String companyName:companyNames){
+				for(Company company: repo_company.findByCompanyName(companyName)){
+					searchCompanys.addAll(company.getPositionSet());
+				}
+			}
+		}else{
+			companyMatch = false;
+		}
+		if(companyMatch){
+			if(isMatched){
+				for(Position position:searchResult){
+					if(searchCompanys.contains(position)==true){
+						tmpResult.add(position);
+					}
+				}
+				searchResult.clear();
+				searchResult.addAll(tmpResult);
+				tmpResult.clear();
+			}else{
+				searchResult.addAll(searchCompanys);
+			}
+			isMatched = true;
+			
+		}
+		Set<Position> searchSkills = new HashSet<Position>();
+		boolean skillMatch = true;
+		if(skills!=null&&skills.length!=0){
+			for(Position position:repo_position.findAll()){
+				for(String skill:skills){
+					if(position.getDescription().contains(skill)||position.getResponsibility().contains(skill)){
+						searchSkills.add(position);
+						break;
+					}
+				}
+			}
+		}else{
+			skillMatch = false;
+		}
+		
+		if(skillMatch){
+			if(isMatched){
+				for(Position position:searchResult){
+					if(searchSkills.contains(position)==true){
+						tmpResult.add(position);
+					}
+				}
+				searchResult.clear();
+				searchResult.addAll(tmpResult);
+				tmpResult.clear();
+			}else{
+				searchResult.addAll(searchSkills);
+			}
+			isMatched = true;
+			
+		}
+		Set<Position> searchLocations = new HashSet<Position>();
+		boolean locationMatch = true;
+		if(locations!=null&&locations.length!=0){
+			for(String location:locations){
+				searchLocations.addAll(repo_position.findByOfficeLocation(location));
+			}
+		}else{
+			locationMatch = false;
+		}
+		if(locationMatch){
+			if(isMatched){
+				for(Position position:searchResult){
+					if(searchLocations.contains(position)==true){
+						tmpResult.add(position);
+					}
+				}
+				searchResult.clear();
+				searchResult.addAll(tmpResult);
+				tmpResult.clear();
+			}else{
+				searchResult.addAll(searchLocations);
+			}
+			isMatched = true;
+		}
+		Set<Position> searchSalary = new HashSet<Position>();
+		boolean salaryMatch = true;
+		if(salaryStart==null&&salaryEnd==null){
+			salaryMatch = false;
+		}
+ 		if(salaryStart==null&&salaryEnd!=null){
+			for(Position position:repo_position.findAll()){
+				if(position.getSalary() < salaryEnd){
+ 					searchSalary.add(position);
+				}
+			}
+		}
+		if(salaryEnd==null&&salaryStart!=null){
+			for(Position position:repo_position.findAll()){
+				if(position.getSalary() > salaryStart){
+ 					searchSalary.add(position);
+				}
+			}
+		}
+		if(salaryStart!=null&&salaryEnd!=null){
+ 			if(salaryStart.equals(salaryEnd)){
+				for(Position position:repo_position.findAll()){
+					if(position.getSalary() == salaryEnd){
+						searchSalary.add(position);
+					}
+				}
+			}else{
+				for(Position position:repo_position.findAll()){
+					Long salary = position.getSalary();
+					if( salary > salaryStart && salary < salaryEnd){
+						searchSalary.add(position);
+					}
+				}
+			}
+		}
+		if(salaryMatch){
+			if(isMatched){
+				for(Position position:searchResult){
+					if(searchSalary.contains(position)==true){
+						tmpResult.add(position);
+					}
+				}
+				searchResult.clear();
+				searchResult.addAll(tmpResult);
+				tmpResult.clear();
+			}else{
+				searchResult.addAll(searchSalary);
+			}
+		}
+		return searchResult;
+	}
 
 }

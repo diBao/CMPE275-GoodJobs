@@ -264,20 +264,22 @@ public class RestServiceController {
 		}
 		 return position.getJSON();
     }
-    /*
+    
     //jobseeker search positions
     @RequestMapping(value="/position", method=RequestMethod.GET)
     public  @ResponseBody String searchPosition(
-    		@RequestParam("title") String[] title,
-    		@RequestParam("companyname") String[] companyName,
-    		@RequestParam("skill") String[] skill,
+    		@RequestParam(value = "title", required = false) String[] title,
+    		@RequestParam(value = "companyname", required = false) String[] companyName,
+    		@RequestParam(value = "skill", required = false) String[] skill ,
     		@RequestParam(value = "salarystart", required = false) Long salaryStart,
     		@RequestParam(value = "salaryend", required = false) Long salaryEnd,
     		@RequestParam(value = "location", required = false) String[] location
     		) { 
 		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
+		System.out.println("!!!!!!!!");
 		return getPositionsJSON("SearchedPositions",rest_position.searchPositions(title, companyName, skill, salaryStart, salaryEnd, location));
-    }*/
+    }  
+    
     
     //retrieve one position
     @RequestMapping(value="/position/{id}", method=RequestMethod.GET)
