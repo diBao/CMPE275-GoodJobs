@@ -29,6 +29,10 @@ import org.json.*;
 @Table(name="Company")
 public class Company {
 	
+	public Company(){
+		
+	}
+	
 	public Company(String name, String website, String logoImageUrl, 
 			String address, String email, String description, String password){
 		this.setCompanyName(name);
@@ -38,6 +42,7 @@ public class Company {
 		this.setEmail(email);
 		this.setDescription(description);
 		this.setPassword(password);
+		this.setPositionSet(new HashSet<Position>());
 	}
 	
 	@Id
@@ -48,16 +53,16 @@ public class Company {
 	@Column(name = "COMPANY_NAME", nullable = false)
 	private String companyName;
 	
-	@Column(name = "WEBSITE", nullable = false)
+	@Column(name = "WEBSITE")
 	private String website;
 	
-	@Column(name = "LOGO_IMAGE_URL", nullable = false)
+	@Column(name = "LOGO_IMAGE_URL")
 	private String logoImageUrl;
 	
-	@Column(name = "ADDRESS", nullable = false)
+	@Column(name = "ADDRESS")
 	private String address;
 	
-	@Column(name = "DESCROPTION", nullable = false)
+	@Column(name = "DESCROPTION")
 	private String description;
 	
 	@Column(name = "EMAIL", nullable = false, unique = true)
@@ -66,7 +71,7 @@ public class Company {
 	@Column(name = "PASSWORD", nullable = false)
 	private String password;
 	
-	@OneToMany(mappedBy = "pID")
+	@OneToMany(mappedBy = "company")
 	private Set<Position> positionSet = new HashSet<Position>();
 
 	public long getcID() {

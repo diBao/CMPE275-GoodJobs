@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+
 //import javax.xml.bind.annotation.XmlTransient;
 //import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +20,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -30,7 +32,14 @@ import org.json.*;
 @JsonRootName(value = "Position")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Position {
-	public Position(String pTitle,String pDesciption,String responsibility,String officeLocation,Long salary){
+	
+	public Position(){
+		
+	}
+	
+	public Position(Company company, String pTitle,String pDesciption,String responsibility,String officeLocation,Long salary){
+		this.setTitle(pTitle);
+		this.setCompany(company);
 		this.setDescription(pDesciption);
 		this.setResponsibility(responsibility);
 		this.setOfficeLocation(officeLocation);
@@ -62,6 +71,8 @@ public class Position {
 	@Column(name = "STATUS", nullable = false)
 	private String status;
 	
+	@ManyToOne(targetEntity=Company.class, fetch = FetchType.LAZY)
+	private Company company;
 	
 	// CHANGED seekerSet -> applicationSet
 	@ManyToMany(targetEntity=Application.class, fetch = FetchType.LAZY)
@@ -153,6 +164,14 @@ public class Position {
 		catch(JSONException e){
 			return e.toString();
 		}
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	

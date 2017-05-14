@@ -54,12 +54,19 @@ public  class RestApplication {
 		//"pending", "Offered"
 		nonTerminalStates.add("pending");
 		nonTerminalStates.add("Offered");
-		for(Application application: repo_application.findAll()){
+		/*original find version
+		 * for(Application application: repo_application.findAll()){
 			//find application with same jobSeeker & position
 			if(application.getJobSeeker().equals(jobSeeker)&& application.getPosition().equals(position)){
 				if(nonTerminalStates.contains(application.getStatus())){
 					return false;
 				}
+			}
+		}*/
+		//find version two
+		for(Application application:repo_application.findApplicationByJobSeekerAndPosition(jobSeeker, position)){
+			if(nonTerminalStates.contains(application.getStatus())){
+				return false;
 			}
 		}
 		//all previous same application exams are passed
@@ -73,14 +80,17 @@ public  class RestApplication {
 	 Application updateApplication(Long aID, String newStatus){
 		//to change application status
 		Application application = repo_application.findOne(aID);
+		//System.out.println("222222222222222222222222222222222");
 		if(newStatus.equals("Cancelled")){
+			System.out.println(newStatus+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"+application.getStatus());
 			if(application.getStatus().equals("OfferAccepted")){
 				//12.ii
-				System.out.println("don't allow change the status for a offer accepted application");
-				return application;
+				//System.out.println("don't allow change the status for a offer accepted application");
+				return null;
 			}
 		}
 		application.setStatus(newStatus);
+		repo_application.save(application);
 		//email update
 		notificationSeeker(application.getJobSeeker(), newStatus);
 		return application;
