@@ -11,4 +11,5 @@ import rest.module.JobSeeker;
 public interface CompanyRepo extends CrudRepository<Company, Long>{
 	Company findBycID(Long cID);
 	Set<Company> findByCompanyName(String companyName);
+	Company findByemail(String email);
 }

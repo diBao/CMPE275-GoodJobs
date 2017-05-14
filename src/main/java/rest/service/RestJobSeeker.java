@@ -27,20 +27,20 @@ public class RestJobSeeker {
 			String workExperience, String education, String skills, String email, String password){
 		JobSeeker jobseeker = new JobSeeker(firstName, lastName, picture, selfIntroduction, workExperience, education, skills, email, password);
 		System.out.println(jobseeker.getsID());
-		//try{
+		try{
 			repo_jobseeker.save(jobseeker);
 			return jobseeker.getJSON();
-//		}
-//		catch(Exception e){
-//			//TODO error message
-//			return "create JobSeeker failed";
-//		}
+		}
+		catch(Exception e){
+			//TODO error message
+			return "create JobSeeker failed";
+		}
 
 	}
 	
-	public String read_jobseeker(Long id){
+	public String read_jobseeker(String email){
 		
-		JobSeeker jobseeker = repo_jobseeker.findBysID(id);
+		JobSeeker jobseeker = repo_jobseeker.findByemail(email);
 		if(jobseeker != null){
 			return jobseeker.getJSON();
 		}
@@ -50,10 +50,10 @@ public class RestJobSeeker {
 		}
 	}
 	
-	public String update_jobseeker(Long id, String firstName, String lastName, String picture, 
+	public String update_jobseeker(String oldEmail, String firstName, String lastName, String picture, 
 			String selfIntroduction, String workExperience, String education, String skills, String email, String password){
 		
-		JobSeeker jobseeker = repo_jobseeker.findBysID(id);
+		JobSeeker jobseeker = repo_jobseeker.findByemail(oldEmail);
 		if(jobseeker == null){
 			return "No Jobseeker found";
 		}
@@ -95,9 +95,9 @@ public class RestJobSeeker {
 		return jobseeker.getJSON();		
 	}
 	
-	public String delete_jobseeker(Long id){
+	public String delete_jobseeker(String email){
 		
-		JobSeeker jobseeker = repo_jobseeker.findBysID(id);
+		JobSeeker jobseeker = repo_jobseeker.findByemail(email);
 		if(jobseeker == null){
 			return "No result found";
 		}
@@ -113,8 +113,8 @@ public class RestJobSeeker {
 		return "";
 	}
 	
-	public String mark_interest(Long id, Long mark){
-		JobSeeker jobseeker = repo_jobseeker.findBysID(id);
+	public String mark_interest(String email, Long mark){
+		JobSeeker jobseeker = repo_jobseeker.findByemail(email);
 		Position position = repo_position.findBypID(mark);
 		if(jobseeker == null || position == null){
 			return "Input error";
@@ -139,8 +139,8 @@ public class RestJobSeeker {
 		
 	}
 	
-	public String unmark_interest(Long id, Long unmark) {
-		JobSeeker jobseeker = repo_jobseeker.findBysID(id);
+	public String unmark_interest(String email, Long unmark) {
+		JobSeeker jobseeker = repo_jobseeker.findByemail(email);
 		Position position = repo_position.findBypID(unmark);
 		if(jobseeker == null || position == null){
 			return "Input error";
@@ -164,10 +164,13 @@ public class RestJobSeeker {
 		}
 	}
 	
-	public String retrieve_all_applications(Long id){
+	public String retrieve_all_applications(String email){
 		
 		
 		return "";
 	}
-
+	public String retrieve_all_positions(String email){
+		
+		return "";
+	}
 }

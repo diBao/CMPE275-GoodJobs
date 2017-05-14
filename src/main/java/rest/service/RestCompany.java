@@ -34,8 +34,8 @@ public class RestCompany {
 		}
 	}
 	
-	public String retrieve_company(Long id){
-		Company company = repo_company.findBycID(id);
+	public String retrieve_company(String email){
+		Company company = repo_company.findByemail(email);
 		if(company != null){
 			return company.getJSON();
 		}
@@ -45,9 +45,9 @@ public class RestCompany {
 		}		
 	}
 	
-	public String update_company(Long id, String name, String website, String logoImageUrl, String address, String email, String description,
+	public String update_company(String newEmail, String name, String website, String logoImageUrl, String address, String email, String description,
 			String password){
-		Company company = repo_company.findBycID(id);
+		Company company = repo_company.findByemail(newEmail);
 		if(company == null){
 			return "No Company found";
 		}
@@ -84,7 +84,7 @@ public class RestCompany {
 	}
 	
 	
-	public String retrieve_positions(Long id, String status){
+	public String retrieve_positions(String email, String status){
 		
 		return "";
 	}

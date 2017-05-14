@@ -40,11 +40,11 @@ public class RestServiceController {
     
     //retrieve jobseeker
 	@RequestMapping(
-			value = "/jobseeker/{id}", 
+			value = "/jobseeker/{email}", 
 			method = RequestMethod.GET)
-	public @ResponseBody String getJobSeeker(@PathVariable Long id) {
+	public @ResponseBody String getJobSeeker(@PathVariable String email) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_jobseeker.read_jobseeker(id);
+		return rest_jobseeker.read_jobseeker(email);
 	}
 	
 	//create jobseeker
@@ -66,9 +66,9 @@ public class RestServiceController {
     }
     
     //update jobseeker
-    @RequestMapping(value="/jobseeker/{id}", method=RequestMethod.PUT)
+    @RequestMapping(value="/jobseeker/{email}", method=RequestMethod.PUT)
     public  @ResponseBody String updateJobSeeker(
-    		@PathVariable Long id,
+    		@PathVariable String email,
     		@RequestParam(value = "firstname", required = false) String firstName, 
     		@RequestParam(value = "lastname", required = false) String lastName,
     		@RequestParam(value = "picture", required = false) String picture,
@@ -76,45 +76,45 @@ public class RestServiceController {
     		@RequestParam(value = "workexperience", required = false) String workExperience,
     		@RequestParam(value = "education", required = false) String education, 
     		@RequestParam(value = "skills", required = false) String skills,
-    		@RequestParam(value = "email", required = false) String email,
+    		@RequestParam(value = "email", required = false) String newEmail,
     		@RequestParam(value = "password", required = false) String password
     		) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_jobseeker.update_jobseeker(id, firstName, lastName, picture, selfIntroduction, workExperience,
-				education, skills, email, password);
+		return rest_jobseeker.update_jobseeker(email, firstName, lastName, picture, selfIntroduction, workExperience,
+				education, skills, newEmail, password);
     }
     
     //mark interest
     @RequestMapping(
-			value = "/jobseeker/{id}",
+			value = "/jobseeker/{email}",
 			params= "mark",
 			method = RequestMethod.POST)
 	public @ResponseBody String markInterest(
-			@PathVariable Long id,
+			@PathVariable String email,
 			@RequestParam("mark") Long mark
 			) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_jobseeker.mark_interest(id, mark);
+		return rest_jobseeker.mark_interest(email, mark);
 	}
     
     //unmark interest
     @RequestMapping(
-			value = "/jobseeker/{id}",
+			value = "/jobseeker/{email}",
 			params= "unmark",
 			method = RequestMethod.POST)
 	public @ResponseBody String unmarkInterest(
-			@PathVariable Long id,
+			@PathVariable String email,
 			@RequestParam("unmark") Long unmark
 			) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_jobseeker.unmark_interest(id, unmark);
+		return rest_jobseeker.unmark_interest(email, unmark);
 	}
     //get all interested positions for one jobseeker
     @RequestMapping(
-    		value="/jobseeker/getInterest/{id}", 
+    		value="/jobseeker/position/{email}", 
     		method=RequestMethod.GET)
-    public @ResponseBody String retrieveInterestPosition(@PathVariable Long id){
-    	JobSeeker jobSeeker = repo_jobseeker.findBysID(id);
+    public @ResponseBody String retrieveInterestPosition(@PathVariable String email){ //email is jobseeker's email
+    	JobSeeker jobSeeker = repo_jobseeker.findByemail(email);
     	return getPositionsJSON("InterestPositions", jobSeeker.getInterestSet());
     }
     public String getPositionsJSON(String header, Set<Position> positions){
@@ -143,24 +143,24 @@ public class RestServiceController {
     }
     //delete jobseeker
     @RequestMapping(
-			value = "/jobseeker/{id}",
+			value = "/jobseeker/{email}",
 			method = RequestMethod.DELETE)
 	public @ResponseBody String deleteJobSeeker(
-			@PathVariable Long id
+			@PathVariable String email
 			) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_jobseeker.delete_jobseeker(id);
+		return rest_jobseeker.delete_jobseeker(email);
 	}
     
     //retrieve all applications 
     @RequestMapping(
-			value = "/jobseeker/application/{id}",
+			value = "/jobseeker/application/{email}",
 			method = RequestMethod.GET)
 	public @ResponseBody String retrieveAllApplications(
-			@PathVariable Long id
+			@PathVariable String email
 			) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_jobseeker.retrieve_all_applications(id);
+		return rest_jobseeker.retrieve_all_applications(email);
 	}
     
     
@@ -186,43 +186,43 @@ public class RestServiceController {
     }
     
     //update company
-    @RequestMapping(value="/company/{id}", method=RequestMethod.PUT)
+    @RequestMapping(value="/company/{email}", method=RequestMethod.PUT)
     public  @ResponseBody String updateCompany(
-    		@PathVariable Long id,
+    		@PathVariable String email,
     		@RequestParam(value = "name", required = false) String name,
     		@RequestParam(value = "website", required = false) String website,
     		@RequestParam(value = "logoimageurl", required = false) String logoImageUrl,
     		@RequestParam(value = "address", required = false) String address,
-    		@RequestParam(value = "email", required = false) String email,
+    		@RequestParam(value = "email", required = false) String preEmail,
     		@RequestParam(value = "description", required = false) String description,
     		@RequestParam(value = "password", required = false) String password
     		) {
     	RestCompany rest_company = new RestCompany(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_company.update_company(id, name, website, logoImageUrl, address, email,
+		return rest_company.update_company(email, name, website, logoImageUrl, address, preEmail,
 				description, password);
     }
     
     //retrieve company
     @RequestMapping(
-			value = "/company/{id}", 
+			value = "/company/{email}", 
 			method = RequestMethod.GET)
 	public @ResponseBody String retrieveCompany(
-			@PathVariable Long id
+			@PathVariable String email
 			) {
 		RestCompany rest_company = new RestCompany(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_company.retrieve_company(id);
+		return rest_company.retrieve_company(email);
 	}
     
     //retrieve all positions from company
     @RequestMapping(
-			value = "/company/position/{id}", 
+			value = "/company/position/{email}", 
 			method = RequestMethod.GET)
 	public @ResponseBody String retrievePositions(
-			@PathVariable Long id, //company id
+			@PathVariable String email, 
 			@RequestParam(value = "status", required = false) String status
 			) {
 		RestCompany rest_company = new RestCompany(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_company.retrieve_positions(id, status);
+		return rest_company.retrieve_positions(email, status);
 	}
   
 //<<<<<<< Updated upstream
