@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import rest.module.Application;
 import rest.module.JobSeeker;
+import rest.module.Position;
 import rest.repo.*;
 
 @RestController
@@ -105,7 +109,38 @@ public class RestServiceController {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
 		return rest_jobseeker.unmark_interest(id, unmark);
 	}
-    
+    //get all interested positions for one jobseeker
+    @RequestMapping(
+    		value="/jobseeker/getInterest/{id}", 
+    		method=RequestMethod.GET)
+    public @ResponseBody String retrieveInterestPosition(@PathVariable Long id){
+    	JobSeeker jobSeeker = repo_jobseeker.findBysID(id);
+    	return getPositionsJSON("InterestPositions", jobSeeker.getInterestSet());
+    }
+    public String getPositionsJSON(String header, Set<Position> positions){
+    	try{
+			JSONObject result = new JSONObject();
+			JSONObject[] jsonArray = new JSONObject[positions.size()];
+			int i = 0;
+			for(Position position:positions){
+				JSONObject positionJson = new JSONObject();
+				positionJson.put("pid", position.getpID());
+				positionJson.put("title", position.getTitle());
+				positionJson.put("description", position.getDescription());
+				positionJson.put("responsibility", position.getResponsibility());
+				positionJson.put("office location", position.getOfficeLocation());
+				positionJson.put("salary", position.getSalary());
+				result.put("status", position.getStatus());
+				jsonArray[i++] = positionJson;
+			}
+			result.put(header, jsonArray);		
+			return result.toString();
+		}
+		catch(JSONException e){
+			return e.toString();
+		}
+    	
+    }
     //delete jobseeker
     @RequestMapping(
 			value = "/jobseeker/{id}",
@@ -222,7 +257,12 @@ public class RestServiceController {
     		) { 
 		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
 		//return rest_position.updatePosition(id, cID, title, description, responsibilities, officeLocation, salary, status);
-		return rest_position.updatePosition(id, title, description, responsibilities, officeLocation, salary, status).getJSON();
+		Position position = rest_position.updatePosition(id, title, description, responsibilities, officeLocation, salary, status);
+		if(position==null){
+			//TODO bad request
+			return "Position with Id " + id + " is not existed";
+		}
+		 return position.getJSON();
     }
     /*
     //jobseeker search positions
@@ -236,7 +276,7 @@ public class RestServiceController {
     		@RequestParam(value = "location", required = false) String[] location
     		) { 
 		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_position.searchPositions(title, companyName, skill, salaryStart, salaryEnd, location);
+		return getPositionsJSON("SearchedPositions",rest_position.searchPositions(title, companyName, skill, salaryStart, salaryEnd, location));
     }*/
     
     //retrieve one position
@@ -245,9 +285,14 @@ public class RestServiceController {
     		@PathVariable Long id
     		) { 
 		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_position.getPosition(id).getJSON();
+		Position position = rest_position.getPosition(id);
+		if(position==null){
+			//TODO bad request
+			return "Position with Id " + id + " is not existed";
+		}
+		return position.getJSON();
     }   		
-
+    
       
     /*************
      *  Application
@@ -273,8 +318,19 @@ public class RestServiceController {
     	
 		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
 		JobSeeker jobSeeker = repo_jobseeker.findOne(sID);
-		// TODO Error Message Application == null
-		return rest_application.createApplication(jobSeeker, jobSeeker.getEmail(), jobSeeker.getFirstName(), jobSeeker.getLastName(), repo_position.findBypID(pID), resumeUrl).getJSON();
+		if(jobSeeker==null){
+			//TODO
+			return "JobSeeker with Id " + sID + " is not existed";
+		}
+		
+		Application application = rest_application.createApplication(jobSeeker, jobSeeker.getEmail(), jobSeeker.getFirstName(), jobSeeker.getLastName(), repo_position.findBypID(pID), resumeUrl);
+		if(application==null){
+			// TODO Error Message Application == null
+			//A user cannot have more than 5 pending applicationss
+			//A user cannot apply for the same position again if the previous application is not in a terminal state
+			return "Not allow to Create this application";
+		}
+		return application.getJSON();
 	}
     
     //jobseeker update application (for multiple applications)
@@ -290,12 +346,17 @@ public class RestServiceController {
 		Set<Long> aIDs = new HashSet<Long>();
 		if(aID!=null&&aID.length!=0){
 			for(Long id: aID){
+				//check if some aId existed
+				if(this.repo_application.findByaID(id)==null){
+					//TODO not existed
+					return "error input aIDs, application id "+ id +" is not existed";
+				}
+				//OK
 				aIDs.add(id);
 			}
 		}
 		rest_application.updateApplications(aIDs);
 		return "multiple cancelled ok";
-		//return rest_application.update_application(sID, aID, reply);
 	}
     
     //company cancel application
@@ -308,7 +369,20 @@ public class RestServiceController {
 			@RequestParam("reply") String reply
 			) {
 		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_application.updateApplication(aID,reply).getJSON();
+		Application application = null;
+		try{
+			repo_application.findOne(aID);
+		}catch(Exception e){
+			//TODO
+			return "Application with "+ aID +" not existed";
+		}
+		application = rest_application.updateApplication(aID,reply);
+		if(application==null){
+			//12.ii
+			//TODO " bad request
+			return "don't allow change the status for a offer accepted application";
+		}
+		return application.getJSON();
 	}
     
   //jobseeker accept or reject application which application?
@@ -321,7 +395,15 @@ public class RestServiceController {
 			@RequestParam("reply") String reply
 			) {
 		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_application.updateApplication(sID, reply).getJSON();
+		if(this.repo_application.findByaID(id)==null){
+			return  "Application with Id " + id + " is not existed";
+		}
+		Application application = rest_application.updateApplication(id, reply);
+		if(application==null){
+			//TODO bad request
+			return "don't allow change the status for a offer accepted application";
+		}
+		 return application.getJSON();
 	}
 //=======
 //    

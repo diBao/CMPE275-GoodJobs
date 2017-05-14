@@ -49,6 +49,7 @@ public class RestPosition {
 	public Position updatePosition(Long pID,String pTitle,String pDesciption,String responsibility,String officeLocation,Long salary,String status){
 		//Notification all the seeker and Same return with create.
 		Position position = repo_position.findOne(pID);
+		if(position==null){ return position;}
 		if(position!=null){
 			if(pTitle!=null){
 				position.setTitle(pTitle);

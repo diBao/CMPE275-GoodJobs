@@ -80,14 +80,17 @@ public  class RestApplication {
 	 Application updateApplication(Long aID, String newStatus){
 		//to change application status
 		Application application = repo_application.findOne(aID);
+		//System.out.println("222222222222222222222222222222222");
 		if(newStatus.equals("Cancelled")){
+			System.out.println(newStatus+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"+application.getStatus());
 			if(application.getStatus().equals("OfferAccepted")){
 				//12.ii
-				System.out.println("don't allow change the status for a offer accepted application");
-				return application;
+				//System.out.println("don't allow change the status for a offer accepted application");
+				return null;
 			}
 		}
 		application.setStatus(newStatus);
+		repo_application.save(application);
 		//email update
 		notificationSeeker(application.getJobSeeker(), newStatus);
 		return application;
