@@ -369,11 +369,8 @@ public class RestServiceController {
 			@RequestParam("reply") String reply
 			) {
 		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
-		Application application = null;
-		try{
-			repo_application.findOne(aID);
-		}catch(Exception e){
-			//TODO
+		Application application = repo_application.findOne(aID);
+		if(application ==null){
 			return "Application with "+ aID +" not existed";
 		}
 		application = rest_application.updateApplication(aID,reply);
