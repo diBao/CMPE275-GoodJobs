@@ -1,6 +1,15 @@
 package rest.service;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import rest. module.*;
 import rest.repo.ApplicationRepo;
@@ -39,8 +48,10 @@ public  class RestApplication {
 			return application;
 		}
 		application = new Application(jobSeeker, sEmail, sFirstName, sLastName, position, resumeURL);
-		
-		notificationSeeker(jobSeeker, application.getStatus());
+		String[] jobseekerEmail = new String[1];
+		jobseekerEmail[1] = jobSeeker.getEmail();
+		Company company = application.getPosition().getCompany();
+		notificationSeeker(company.getEmail(),company.getPassword(), jobseekerEmail, application.getStatus());
 		
 		return repo_application.save(application);// with new generate aID.
 	}
@@ -82,7 +93,7 @@ public  class RestApplication {
 		Application application = repo_application.findOne(aID);
 		//System.out.println("222222222222222222222222222222222");
 		if(newStatus.equals("Cancelled")){
-			System.out.println(newStatus+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"+application.getStatus());
+			//System.out.println(newStatus+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"+application.getStatus());
 			if(application.getStatus().equals("OfferAccepted")){
 				//12.ii
 				//System.out.println("don't allow change the status for a offer accepted application");
@@ -92,7 +103,10 @@ public  class RestApplication {
 		application.setStatus(newStatus);
 		repo_application.save(application);
 		//email update
-		notificationSeeker(application.getJobSeeker(), newStatus);
+		String[] jobseekerEmail = new String[1];
+		jobseekerEmail[1] = application.getJobSeeker().getEmail();
+		Company company = application.getPosition().getCompany();
+		notificationSeeker(company.getEmail(),company.getPassword(), jobseekerEmail, application.getStatus());
 		return application;
 		
 	}
@@ -104,7 +118,12 @@ public  class RestApplication {
 			application.setStatus("Cancelled");
 			repo_application.save(application);
 			//TODO email update the application's jobseeker
-			notificationSeeker(application.getJobSeeker(), "Cancelled");
+			String[] jobseekerEmail = new String[1];
+			jobseekerEmail[1] = application.getJobSeeker().getEmail();
+			Company company = application.getPosition().getCompany();
+			notificationSeeker(company.getEmail(),company.getPassword(), jobseekerEmail,"Cancelled");
+
+			//notificationSeeker(application.getJobSeeker(), "Cancelled");
 		}
 		//cancel more than one application, no returns
 	}
@@ -121,9 +140,52 @@ public  class RestApplication {
 		}
 		return false;
 	}
-	public void notificationSeeker(JobSeeker jobSeeker, String status){
+	public void notificationSeeker(String from,String password, String[] to, String status){
 		//listen function, listen to the changes of itself and notify its seekerSet
 		//TODO
+        String subject = "GoodJobs notification";
+        String body ="Your application changes to"+ status;
+        Properties props = System.getProperties();
+        String host = "smtp.gmail.com";
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.user", from);
+        props.put("mail.smtp.password", password);
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+
+        Session session = Session.getDefaultInstance(props);
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+            message.setFrom(new InternetAddress(from));
+            InternetAddress[] toAddress = new InternetAddress[to.length];
+
+            // To get the array of addresses
+            for( int i = 0; i < to.length; i++ ) {
+                toAddress[i] = new InternetAddress(to[i]);
+            }
+
+            for( int i = 0; i < toAddress.length; i++) {
+                message.addRecipient(Message.RecipientType.TO, toAddress[i]);
+            }
+//            InternetAddress toAddress = new InternetAddress(to);     
+//            message.addRecipient(Message.RecipientType.TO, toAddress);
+
+            message.setSubject(subject);
+            message.setText(body);
+            Transport transport = session.getTransport("smtp");
+            transport.connect(host, from, password);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+        }
+        catch (AddressException ae) {
+            ae.printStackTrace();
+        }
+        catch (MessagingException me) {
+            me.printStackTrace();
+        }
 	}
+
 
 }

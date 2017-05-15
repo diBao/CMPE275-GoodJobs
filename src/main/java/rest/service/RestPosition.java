@@ -5,8 +5,11 @@ import rest.repo.CompanyRepo;
 import rest.repo.JobSeekerRepo;
 import rest.repo.PositionRepo;
 
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+
 
 import rest.module.Application;
 import rest.module.Company;
@@ -73,16 +76,10 @@ public class RestPosition {
 					for(Application application: repo_application.findByPosition(position)){
 						cancelledCandidates.add(application.getaID());
 					}
-					/*
-					 * original version
-					for(Application application: repo_application.findAll()){
-						if(application.getPosition().equals(position)){
-							cancelledCandidates.add(application.getaID());
-						}
-					}*/
+					
 					//including notify job seekers in application list
 					RestApplication restapplication = new RestApplication(this.repo_jobseeker, this.repo_company, this.repo_application, this.repo_position);
-					restapplication.updateApplications(cancelledCandidates);
+					restapplication.updateApplications(cancelledCandidates);//already notify seeker in this function
 					//If a position gets filled or cancelled by the company, 
 					//it would be removed from applicant’s interesting list automatically
 					for(JobSeeker jobSeeker: position.getInterestSet()){
@@ -91,7 +88,13 @@ public class RestPosition {
 					}
 				}else{
 					//no influence to application, just notify job seekers
-					notificationSeeker();//parameter
+					String[] jobseekerEmail = new String[position.getApplicationSet().size()];
+					int i = 0;
+					for(Application application:position.getApplicationSet()){
+						jobseekerEmail[i++] = application.getJobSeeker().getEmail();
+					}
+					Company company = position.getCompany();
+					notificationSeeker(company.getEmail(),company.getPassword(), jobseekerEmail, position.getStatus());
 				}
 				
 			}
@@ -109,16 +112,69 @@ public class RestPosition {
 				return false;
 			}
 			// success delete: true
-			notificationSeeker();//including applications and interests
+			String[] jobseekerEmail = new String[position.getApplicationSet().size()+position.getInterestSet().size()];
+			int i = 0;
+			for(Application application:position.getApplicationSet()){
+				jobseekerEmail[i++] = application.getJobSeeker().getEmail();
+			}
+			for(JobSeeker jobSeeker:position.getInterestSet()){
+				jobseekerEmail[i++] = jobSeeker.getEmail();
+			}
+			Company company = position.getCompany();
+			notificationSeeker(company.getEmail(),company.getPassword(), jobseekerEmail, "Deleted");
+
+			//notificationSeeker();//including applications and interests
 			return true;
 		}
 	
 		//not find pID or fail delete : false
 		return false;
 	}
-	public void notificationSeeker(){
+	public void notificationSeeker(String from,String password, String[] to, String status){
 		//listen function, listen to the changes of itself and notify its seekerSet
 		//TODO
+        String subject = "GoodJobs notification";
+        String body ="Position status changes to"+ status;
+        Properties props = System.getProperties();
+        String host = "smtp.gmail.com";
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.user", from);
+        props.put("mail.smtp.password", password);
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+
+        Session session = Session.getDefaultInstance(props);
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+            message.setFrom(new InternetAddress(from));
+            InternetAddress[] toAddress = new InternetAddress[to.length];
+
+            // To get the array of addresses
+            for( int i = 0; i < to.length; i++ ) {
+                toAddress[i] = new InternetAddress(to[i]);
+            }
+
+            for( int i = 0; i < toAddress.length; i++) {
+                message.addRecipient(Message.RecipientType.TO, toAddress[i]);
+            }
+//            InternetAddress toAddress = new InternetAddress(to);     
+//            message.addRecipient(Message.RecipientType.TO, toAddress);
+
+            message.setSubject(subject);
+            message.setText(body);
+            Transport transport = session.getTransport("smtp");
+            transport.connect(host, from, password);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+        }
+        catch (AddressException ae) {
+            ae.printStackTrace();
+        }
+        catch (MessagingException me) {
+            me.printStackTrace();
+        }
 	}
 	
 	public Set<Position> searchPositions(String[] titles,String[] companyNames,String[] skills,Long salaryStart,Long salaryEnd,String[] locations){
