@@ -1,6 +1,9 @@
 package rest.service;
 
+import java.util.Set;
+
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import rest.repo.ApplicationRepo;
 import rest.repo.CompanyRepo;
@@ -86,8 +89,60 @@ public class RestCompany {
 	
 	public String retrieve_positions(String email, String status){
 		
-		return "";
+		Company company = repo_company.findByemail(email);
+		if(company != null){			
+			if(status == null){
+				Set<Position> p_set = company.getPositionSet();
+				JSONObject result = new JSONObject();
+				JSONObject[] positions = new JSONObject[p_set.size()];
+				int count = 0;
+				for(Position i : p_set){
+					positions[count] = i.getJSONObj();
+					count++;				
+				}
+				try {
+					result.put("positions", positions);
+					return result.toString();	
+				} catch (JSONException e) {
+					return "JSON convert failed";
+				}		
+			}
+			else{
+				Set<Position> p_set = company.getPositionSet();
+				int k = 0;
+				for(Position j : p_set){
+					if(status.equals(j.getStatus())){
+						k++;
+					}
+				}
+				
+				JSONObject result = new JSONObject();
+				JSONObject[] positions = new JSONObject[k];
+				int count = 0;
+				for(Position i : p_set){
+					if(status.equals(i.getStatus()) && count < k){
+						positions[count] = i.getJSONObj();
+						count++;	
+					}								
+				}
+				try {
+					if(positions.length == 0){
+						return null;
+					}
+					
+					result.put("positions", positions);
+					return result.toString();	
+				} catch (JSONException e) {
+					return "JSON convert failed";
+				}	
+			}
+		}
+		else{
+			//TODO error message 
+			return "No result found";
+		}		
 	}
+
 	/*
 	public String delete_company(){
 		return "";

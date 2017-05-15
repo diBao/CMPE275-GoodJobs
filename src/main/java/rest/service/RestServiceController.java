@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rest.module.Application;
+import rest.module.Company;
 import rest.module.JobSeeker;
 import rest.module.Position;
 import rest.repo.*;
@@ -128,7 +129,7 @@ public class RestServiceController {
 				positionJson.put("title", position.getTitle());
 				positionJson.put("description", position.getDescription());
 				positionJson.put("responsibility", position.getResponsibility());
-				positionJson.put("office location", position.getOfficeLocation());
+				positionJson.put("office_location", position.getOfficeLocation());
 				positionJson.put("salary", position.getSalary());
 				result.put("status", position.getStatus());
 				jsonArray[i++] = positionJson;
@@ -141,6 +142,10 @@ public class RestServiceController {
 		}
     	
     }
+    
+    
+    
+    
     //delete jobseeker
     @RequestMapping(
 			value = "/jobseeker/{email}",
@@ -223,6 +228,8 @@ public class RestServiceController {
 			) {
 		RestCompany rest_company = new RestCompany(repo_jobseeker, repo_company, repo_application, repo_position);
 		return rest_company.retrieve_positions(email, status);
+//		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
+//		return rest_position.getGlobalPositions();
 	}
   
 //<<<<<<< Updated upstream
@@ -276,7 +283,9 @@ public class RestServiceController {
     		@RequestParam(value = "location", required = false) String[] location
     		) { 
 		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
-		System.out.println("!!!!!!!!");
+		if(title ==  null && companyName ==  null && skill ==  null && salaryStart ==  null && salaryEnd ==  null && location == null){
+			return rest_position.getGlobalPositions();
+		}
 		return getPositionsJSON("SearchedPositions",rest_position.searchPositions(title, companyName, skill, salaryStart, salaryEnd, location));
     }  
     

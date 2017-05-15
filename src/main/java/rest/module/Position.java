@@ -166,6 +166,24 @@ public class Position {
 		}
 	}
 
+	public JSONObject getJSONObj(){
+		
+		try{
+			JSONObject result = new JSONObject();
+			result.put("pid", getpID());
+			result.put("title", getTitle());
+			result.put("description", getDescription());
+			result.put("responsibility", getResponsibility());
+			result.put("office_location", getOfficeLocation());
+			result.put("salary", getSalary());
+			result.put("status", getStatus());
+			return result;
+		}
+		catch(JSONException e){
+			return new JSONObject();
+		}
+	}
+
 	public Company getCompany() {
 		return company;
 	}

@@ -5,11 +5,12 @@ import rest.repo.CompanyRepo;
 import rest.repo.JobSeekerRepo;
 import rest.repo.PositionRepo;
 
-
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import rest.module.Application;
 import rest.module.Company;
@@ -81,7 +82,7 @@ public class RestPosition {
 					RestApplication restapplication = new RestApplication(this.repo_jobseeker, this.repo_company, this.repo_application, this.repo_position);
 					restapplication.updateApplications(cancelledCandidates);//already notify seeker in this function
 					//If a position gets filled or cancelled by the company, 
-					//it would be removed from applicantâ€™s interesting list automatically
+					//it would be removed from applicant’s interesting list automatically
 					for(JobSeeker jobSeeker: position.getInterestSet()){
 						jobSeeker.getInterestSet().remove(position);
 						//sposition.getInterestSet().remove(jobSeeker);
@@ -339,7 +340,48 @@ public class RestPosition {
 				searchResult.addAll(searchSalary);
 			}
 		}
+		
 		return searchResult;
+	}	
+
+	public String getGlobalPositionsJSON(String header, Set<Position> positions){
+    	try{
+			JSONObject result = new JSONObject();
+			JSONObject[] jsonArray = new JSONObject[positions.size()];
+			int i = 0;
+			for(Position position:positions){
+				JSONObject positionJson = new JSONObject();
+				Company company = position.getCompany();
+				positionJson.put("company_email", company.getEmail());
+				positionJson.put("company_name", company.getCompanyName());
+				positionJson.put("pid", position.getpID());
+				positionJson.put("title", position.getTitle());
+				positionJson.put("description", position.getDescription());
+				positionJson.put("responsibility", position.getResponsibility());
+				positionJson.put("office_location", position.getOfficeLocation());
+				positionJson.put("salary", position.getSalary());
+				
+				jsonArray[i++] = positionJson;
+			}
+			result.put(header, jsonArray);		
+			return result.toString();
+		}
+		catch(JSONException e){
+			return e.toString();
+		}
+    	
+    }    
+    
+	public String getGlobalPositions(){
+		Set<Position> result = new HashSet<Position>();
+		Set<Company> companies = repo_company.findAll();
+		for(Company i : companies){
+			Set<Position> positions = i.getPositionSet();
+			for(Position j : positions){
+				result.add(j);
+			}			
+		}		
+		return getGlobalPositionsJSON("AllPositions", result);
 	}
 
 }
