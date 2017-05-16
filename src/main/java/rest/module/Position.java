@@ -156,7 +156,7 @@ public class Position {
 			result.put("title", getTitle());
 			result.put("description", getDescription());
 			result.put("responsibility", getResponsibility());
-			result.put("office location", getOfficeLocation());
+			result.put("officeLocation", getOfficeLocation());
 			result.put("salary", getSalary());
 			result.put("status", getStatus());
 			return result.toString();

@@ -11,7 +11,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import rest. module.*;
+import rest.module.*;
 import rest.repo.ApplicationRepo;
 import rest.repo.CompanyRepo;
 import rest.repo.JobSeekerRepo;
@@ -47,12 +47,13 @@ public  class RestApplication {
 			//authorization result for create new application is: not allowed
 			return application;
 		}
+		
 		application = new Application(jobSeeker, sEmail, sFirstName, sLastName, position, resumeURL);
+		position.getApplicationSet().add(application);
 		String[] jobseekerEmail = new String[1];
-		jobseekerEmail[1] = jobSeeker.getEmail();
+		jobseekerEmail[0] = jobSeeker.getEmail();
 		Company company = application.getPosition().getCompany();
 		notificationSeeker(company.getEmail(),company.getPassword(), jobseekerEmail, application.getStatus());
-		
 		return repo_application.save(application);// with new generate aID.
 	}
 	

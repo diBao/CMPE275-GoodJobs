@@ -31,9 +31,9 @@ public class RestPosition {
 		this.repo_application = repo_application;
 		this.repo_position = repo_position;
 	} 	
-	public Position createPosition(Long cID, String pTitle,String pDesciption,String responsibility,String officeLocation,Long salary) {
+	public Position createPosition(String cEmail, String pTitle,String pDesciption,String responsibility,String officeLocation,Long salary) {
 		// with initial status + new generate pID
-		Company company = this.repo_company.findBycID(cID);
+		Company company = this.repo_company.findByemail(cEmail);
 		
 		Position position = new Position(company, pTitle, pDesciption, responsibility, officeLocation, salary);
 		//System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
@@ -82,7 +82,7 @@ public class RestPosition {
 					RestApplication restapplication = new RestApplication(this.repo_jobseeker, this.repo_company, this.repo_application, this.repo_position);
 					restapplication.updateApplications(cancelledCandidates);//already notify seeker in this function
 					//If a position gets filled or cancelled by the company, 
-					//it would be removed from applicant’s interesting list automatically
+					//it would be removed from applicantï¿½s interesting list automatically
 					for(JobSeeker jobSeeker: position.getInterestSet()){
 						jobSeeker.getInterestSet().remove(position);
 						//sposition.getInterestSet().remove(jobSeeker);
@@ -383,5 +383,70 @@ public class RestPosition {
 		}		
 		return getGlobalPositionsJSON("AllPositions", result);
 	}
+	
+	//DONE by george 3
+	public String retrieve_all_applications(Long id){
+		Position position = repo_position.findBypID(id);
+		Set<Application> applications = position.getApplicationSet();
+		if(applications.isEmpty())
+			return "no applicant";
+		return getApplicationsJSON("Applicaitons", applications);
+	}
+	public String getApplicationsJSON(String header, Set<Application> applications){
+    	try{
+			JSONObject result = new JSONObject();
+			JSONObject[] jsonArray = new JSONObject[applications.size()];
+			int i = 0;
+			for(Application application: applications){
+				JSONObject applicationJson = new JSONObject();
+				applicationJson.put("aid", application.getaID());
+				applicationJson.put("email", application.getEmail());
+				applicationJson.put("firstName", application.getFirstName());
+				applicationJson.put("lastName", application.getLastName());
+				applicationJson.put("resumeUrl", application.getResumeUrl());
+				applicationJson.put("status", application.getStatus());
+				//result.put("status", application.getStatus());
+				jsonArray[i++] = applicationJson;
+			}
+			result.put(header, jsonArray);		
+			return result.toString();
+		}
+		catch(JSONException e){
+			return e.toString();
+		}
+	}
+	
+	//DONE by george 4
+	public String retrieve_all_interests(Long id){ //position id
+		Position position = repo_position.findBypID(id);
+		Set<JobSeeker> interests = position.getInterestSet();
+		return getInterestSeekerJSON("interestApplicants", interests);
+	}
+	
+	public String getInterestSeekerJSON(String header, Set<JobSeeker> jobSeekers){
+    	try{
+			JSONObject result = new JSONObject();
+			JSONObject[] jsonArray = new JSONObject[jobSeekers.size()];
+			int i = 0;
+			for(JobSeeker jobSeeker: jobSeekers){
+				JSONObject jobSeekerJson = new JSONObject();
+				jobSeekerJson.put("sid", jobSeeker.getsID());
+				jobSeekerJson.put("education", jobSeeker.getEducation());
+				jobSeekerJson.put("email", jobSeeker.getEmail());
+				jobSeekerJson.put("experience", jobSeeker.getExperience());
+				jobSeekerJson.put("firstName", jobSeeker.getFirstName());
+				jobSeekerJson.put("introduction", jobSeeker.getIntroduction());
+				jobSeekerJson.put("lastName", jobSeeker.getLastName());
+				jobSeekerJson.put("picture", jobSeeker.getPicture());
+				jobSeekerJson.put("skills", jobSeeker.getSkills());
+				jsonArray[i++] = jobSeekerJson;
+			}
+			result.put(header, jsonArray);		
+			return result.toString();
+		}
+		catch(JSONException e){
+			return e.toString();
+		}
+    }
 
 }

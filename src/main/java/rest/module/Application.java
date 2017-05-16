@@ -137,8 +137,9 @@ public class Application {
 		try{
 			JSONObject result = new JSONObject();
 			result.put("aid", getaID());
-			result.put("first_name", getFirstName());
-			result.put("last_name", getLastName());
+
+			result.put("firstName", getFirstName());
+			result.put("lastName", getLastName());
 			result.put("email", getEmail());
 			result.put("status", getStatus());
 			
@@ -146,8 +147,9 @@ public class Application {
 			JobSeeker jobseekerObj = getJobSeeker();
 			JSONObject jobseeker = new JSONObject();
 			jobseeker.put("sid", jobseekerObj.getsID());
-			jobseeker.put("first_name", jobseekerObj.getFirstName());
-			jobseeker.put("last_name", jobseekerObj.getLastName());
+
+			jobseeker.put("firstName", jobseekerObj.getFirstName());
+			jobseeker.put("lastName", jobseekerObj.getLastName());
 			jobseeker.put("picture", jobseekerObj.getPicture());
 			jobseeker.put("introduction", jobseekerObj.getIntroduction());
 			jobseeker.put("experience", jobseekerObj.getExperience());

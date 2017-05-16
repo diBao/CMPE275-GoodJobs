@@ -1,6 +1,7 @@
 package rest.service;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import rest.repo.*;
 import rest.module.*;
@@ -164,13 +165,64 @@ public class RestJobSeeker {
 		}
 	}
 	
+	//Done by george 2
 	public String retrieve_all_applications(String email){
-		
-		
-		return "";
+		JobSeeker jobseeker = repo_jobseeker.findByemail(email);
+		Set<Application> applications = jobseeker.getApplicationSet();
+		return getApplicationsJSON("applications", applications);
 	}
-	public String retrieve_all_positions(String email){
-		
-		return "";
-	}
+	public String getApplicationsJSON(String header, Set<Application> applications){
+    	try{
+			JSONObject result = new JSONObject();
+			JSONObject[] jsonArray = new JSONObject[applications.size()];
+			int i = 0;
+			for(Application application: applications){
+				JSONObject applicationJson = new JSONObject();
+				applicationJson.put("aid", application.getaID());
+				applicationJson.put("email", application.getEmail());
+				applicationJson.put("firstName", application.getFirstName());
+				applicationJson.put("lastName", application.getLastName());
+				applicationJson.put("resumeUrl", application.getResumeUrl());
+				applicationJson.put("status", application.getStatus());
+				//result.put("status", application.getStatus());
+				jsonArray[i++] = applicationJson;
+			}
+			result.put(header, jsonArray);		
+			return result.toString();
+		}
+		catch(JSONException e){
+			return e.toString();
+		}
+    }
+	
+//	//DONE in the rest service controller by george 1
+//	public String retrieve_all_interests(String email){
+//		JobSeeker jobseeker = repo_jobseeker.findByemail(email);
+//		Set<Position> positions = jobseeker.getInterestSet();
+//		return getgetPositionsJSON("interestPositions");
+//	}
+//	
+//	public String getPositionsJSON(String header, Set<Position> positions){
+//    	try{
+//			JSONObject result = new JSONObject();
+//			JSONObject[] jsonArray = new JSONObject[positions.size()];
+//			int i = 0;
+//			for(Position position:positions){
+//				JSONObject positionJson = new JSONObject();
+//				positionJson.put("pid", position.getpID());
+//				positionJson.put("title", position.getTitle());
+//				positionJson.put("description", position.getDescription());
+//				positionJson.put("responsibility", position.getResponsibility());
+//				positionJson.put("office_location", position.getOfficeLocation());
+//				positionJson.put("salary", position.getSalary());
+//				result.put("status", position.getStatus());
+//				jsonArray[i++] = positionJson;
+//			}
+//			result.put(header, jsonArray);		
+//			return result.toString();
+//		}
+//		catch(JSONException e){
+//			return e.toString();
+//		}
+//    }
 }

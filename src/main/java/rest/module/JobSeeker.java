@@ -183,8 +183,9 @@ public class JobSeeker {
 		try{
 			JSONObject result = new JSONObject();
 			result.put("sid", getsID());
-			result.put("first_name", getFirstName());
-			result.put("last_name", getLastName());
+
+			result.put("firstName", getFirstName());
+			result.put("lastName", getLastName());
 			result.put("picture", getPicture());
 			result.put("introduction", getIntroduction());
 			result.put("experience", getExperience());

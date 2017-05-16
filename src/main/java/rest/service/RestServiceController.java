@@ -131,7 +131,7 @@ public class RestServiceController {
 				positionJson.put("responsibility", position.getResponsibility());
 				positionJson.put("office_location", position.getOfficeLocation());
 				positionJson.put("salary", position.getSalary());
-				result.put("status", position.getStatus());
+				positionJson.put("status", position.getStatus());
 				jsonArray[i++] = positionJson;
 			}
 			result.put(header, jsonArray);		
@@ -140,7 +140,6 @@ public class RestServiceController {
 		catch(JSONException e){
 			return e.toString();
 		}
-    	
     }
     
     
@@ -167,6 +166,18 @@ public class RestServiceController {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
 		return rest_jobseeker.retrieve_all_applications(email);
 	}
+    //Done above
+//    //retrieve all interests
+//    @RequestMapping(
+//			value = "/jobseeker/interest/{email}",
+//			method = RequestMethod.GET)
+//	public @ResponseBody String retrieveAllInterests(
+//			@PathVariable String email
+//			) {
+//		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
+//		return rest_jobseeker.retrieve_all_interests(email);
+//	}
+    
     
     
     /*******************
@@ -239,7 +250,7 @@ public class RestServiceController {
     //create position
     @RequestMapping(value="/position", method=RequestMethod.POST)
     public  @ResponseBody String createPosition(
-    		@RequestParam("cid") Long cID,
+    		@RequestParam("cEmail") String cEmail,
     		@RequestParam("title") String title,
     		@RequestParam("description") String description,
     		@RequestParam("responsibilities") String responsibilities,
@@ -247,14 +258,14 @@ public class RestServiceController {
     		@RequestParam("salary") Long salary
     		) { 
 		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
-		return rest_position.createPosition(cID, title, description, responsibilities, officeLocation, salary).getJSON();
+		return rest_position.createPosition(cEmail, title, description, responsibilities, officeLocation, salary).getJSON();
     }
     
     //company update position
     @RequestMapping(value="/position/{id}", method=RequestMethod.PUT)
     public  @ResponseBody String updatePosition(
     		@PathVariable Long id,
-    		@RequestParam(value = "cid") Long cID,
+    		@RequestParam(value = "cEmail") String cEmail,
     		@RequestParam(value = "title", required = false) String title,
     		@RequestParam(value = "description", required = false) String description,
     		@RequestParam(value = "responsibilities", required = false) String responsibilities,
@@ -302,7 +313,27 @@ public class RestServiceController {
 			return "Position with Id " + id + " is not existed";
 		}
 		return position.getJSON();
-    }   		
+    }  
+    
+    @RequestMapping(
+			value = "/position/application/{id}",
+			method = RequestMethod.GET)
+	public @ResponseBody String retrieveApplicationsOfPosition(
+			@PathVariable Long id
+			) {
+		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_position.retrieve_all_applications(id);
+	}
+    
+    @RequestMapping(
+			value = "/position/interest/{id}",
+			method = RequestMethod.GET)
+	public @ResponseBody String retrieveInterestsOfPosition(
+			@PathVariable Long id
+			) {
+		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_position.retrieve_all_interests(id);
+	}
     
       
     /*************
@@ -322,25 +353,26 @@ public class RestServiceController {
 			value = "/application", 
 			method = RequestMethod.POST)
 	public @ResponseBody String applyApplication(
-			@RequestParam("sid") Long sID,
+			@RequestParam("sEmail") String sEmail,
 			@RequestParam("pid") Long pID,
 			@RequestParam(value = "resumeUrl", required = false) String resumeUrl
 			) {
     	
 		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
-		JobSeeker jobSeeker = repo_jobseeker.findOne(sID);
+		JobSeeker jobSeeker = repo_jobseeker.findByemail(sEmail);
 		if(jobSeeker==null){
 			//TODO
-			return "JobSeeker with Id " + sID + " is not existed";
+			return "JobSeeker with Email " + sEmail + " is not existed";
 		}
 		
-		Application application = rest_application.createApplication(jobSeeker, jobSeeker.getEmail(), jobSeeker.getFirstName(), jobSeeker.getLastName(), repo_position.findBypID(pID), resumeUrl);
+		Application application = rest_application.createApplication(jobSeeker, sEmail, jobSeeker.getFirstName(), jobSeeker.getLastName(), repo_position.findBypID(pID), resumeUrl);
 		if(application==null){
 			// TODO Error Message Application == null
 			//A user cannot have more than 5 pending applicationss
 			//A user cannot apply for the same position again if the previous application is not in a terminal state
 			return "Not allow to Create this application";
 		}
+		
 		return application.getJSON();
 	}
     
@@ -349,7 +381,7 @@ public class RestServiceController {
 			value = "/application/jobseeker", 
 			method = RequestMethod.PUT)
 	public @ResponseBody String updateApplication(
-			@RequestParam("sid") Long sID,
+			@RequestParam("sEamil") Long sEmail,
 			@RequestParam("aid") Long[] aID,
 			@RequestParam("reply") String reply
 			) {
@@ -375,7 +407,7 @@ public class RestServiceController {
 			value = "/application/company", 
 			method = RequestMethod.PUT)
 	public @ResponseBody String cancelApplication(
-			@RequestParam("cid") Long cID,
+			@RequestParam("cEmail") String cEmail,
 			@RequestParam("aid") Long aID,
 			@RequestParam("reply") String reply
 			) {
@@ -399,7 +431,7 @@ public class RestServiceController {
 			method = RequestMethod.PUT)
 	public @ResponseBody String accRejApplication(
 			@PathVariable Long id, // application ID
-			@RequestParam("sid") Long sID,
+			@RequestParam("sEmail") Long sEmail,
 			@RequestParam("reply") String reply
 			) {
 		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);
