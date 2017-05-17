@@ -42,7 +42,7 @@ public class RestCompany {
 	    	//please add it in local env and do not git push unless you delete the password
 	    	String emailPassword = "qgv-hzg-k92-PZZ";
 			String subject = "GoodJobs Confirmation";
-		    String body ="You have company acount: "+ email + " in GoodJobs now!s";
+		    String body ="You have company acount: "+ email + " in GoodJobs now!";
 		    Properties props = System.getProperties();
 		    String host = "smtp.gmail.com";
 		    props.put("mail.smtp.starttls.enable", "true");
