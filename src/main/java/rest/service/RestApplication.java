@@ -115,7 +115,7 @@ public  class RestApplication {
 		repo_application.save(application);
 		//email update
 		String[] jobseekerEmail = new String[1];
-		jobseekerEmail[1] = application.getJobSeeker().getEmail();
+		jobseekerEmail[0] = application.getJobSeeker().getEmail();
 		Company company = application.getPosition().getCompany();
 		notificationSeeker(company.getEmail(),company.getPassword(), jobseekerEmail, application.getStatus());
 		return application;

@@ -2,8 +2,17 @@ package rest.service;
 
 import java.text.ParseException;
 import java.util.HashSet;
+import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
@@ -38,7 +47,45 @@ public class RestServiceController {
 	/*******************
 	 * JobSeeker
 	 ***************/
-    
+    //registration validation for job seeker
+    @RequestMapping(
+    		value = "/jobseeker/varification", method=RequestMethod.GET)
+    public @ResponseBody String createSeekerVarification(
+    		@RequestParam("email") String email){
+    	Random random = new Random();
+    	Integer varificationCode = random.nextInt();
+    	String from = "cmpe275goodjobs@gmail.com";
+    	//please add it in local env and do not git push unless you delete the password
+    	String password = "";
+		String subject = "GoodJobs notification";
+	    String body ="Your registration code is: "+ varificationCode;
+	    Properties props = System.getProperties();
+	    String host = "smtp.gmail.com";
+	    props.put("mail.smtp.starttls.enable", "true");
+	    props.put("mail.smtp.host", host);
+	    props.put("mail.smtp.user", from);
+	    props.put("mail.smtp.password", password);
+	    props.put("mail.smtp.port", "587");
+	    props.put("mail.smtp.auth", "true");
+	    Session session = Session.getDefaultInstance(props);
+	    MimeMessage message = new MimeMessage(session);
+	    try {
+	            message.setFrom(new InternetAddress(from));
+	            InternetAddress toAddress = new InternetAddress(email);
+	            message.addRecipient(Message.RecipientType.TO, toAddress);
+	            message.setSubject(subject);
+	            message.setText(body);
+	            Transport transport = session.getTransport("smtp");
+	            transport.connect(host, from, password);
+	            transport.sendMessage(message, message.getAllRecipients());
+	            transport.close();
+	    }catch (AddressException ae) {
+	            ae.printStackTrace();
+	    }catch (MessagingException me) {
+	            me.printStackTrace();
+	    }
+	    return varificationCode.toString();
+    }
     //retrieve jobseeker
 	@RequestMapping(
 			value = "/jobseeker/{email:.+}", //{email}", //
