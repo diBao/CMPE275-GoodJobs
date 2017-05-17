@@ -84,7 +84,7 @@ public class JobSeeker {
 	private Set<Position> interestSet = new HashSet<Position>();
 	
 	//@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	@OneToMany(targetEntity = Position.class, fetch = FetchType.LAZY)
+	@OneToMany(targetEntity = Application.class, fetch = FetchType.LAZY)
 	private Set<Application> applicationSet = new HashSet<Application>();
 
 	public long getsID() {

@@ -50,6 +50,7 @@ public  class RestApplication {
 		
 		application = new Application(jobSeeker, sEmail, sFirstName, sLastName, position, resumeURL);
 		position.getApplicationSet().add(application);
+		jobSeeker.getApplicationSet().add(application);
 		String[] jobseekerEmail = new String[1];
 		jobseekerEmail[0] = jobSeeker.getEmail();
 		Company company = application.getPosition().getCompany();

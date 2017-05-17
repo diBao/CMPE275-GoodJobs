@@ -388,8 +388,6 @@ public class RestPosition {
 	public String retrieve_all_applications(Long id){
 		Position position = repo_position.findBypID(id);
 		Set<Application> applications = position.getApplicationSet();
-		if(applications.isEmpty())
-			return "no applicant";
 		return getApplicationsJSON("Applicaitons", applications);
 	}
 	public String getApplicationsJSON(String header, Set<Application> applications){

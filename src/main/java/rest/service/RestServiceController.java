@@ -41,7 +41,7 @@ public class RestServiceController {
     
     //retrieve jobseeker
 	@RequestMapping(
-			value = "/jobseeker/{email}", 
+			value = "/jobseeker/{email}", //{email:.+}", 
 			method = RequestMethod.GET)
 	public @ResponseBody String getJobSeeker(@PathVariable String email) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
@@ -67,7 +67,7 @@ public class RestServiceController {
     }
     
     //update jobseeker
-    @RequestMapping(value="/jobseeker/{email}", method=RequestMethod.PUT)
+    @RequestMapping(value="/jobseeker/{email}", method=RequestMethod.PUT) //{email:.+}",
     public  @ResponseBody String updateJobSeeker(
     		@PathVariable String email,
     		@RequestParam(value = "firstname", required = false) String firstName, 
@@ -87,7 +87,7 @@ public class RestServiceController {
     
     //mark interest
     @RequestMapping(
-			value = "/jobseeker/{email}",
+			value = "/jobseeker/{email}", //{email:.+}",
 			params= "mark",
 			method = RequestMethod.POST)
 	public @ResponseBody String markInterest(
@@ -100,7 +100,7 @@ public class RestServiceController {
     
     //unmark interest
     @RequestMapping(
-			value = "/jobseeker/{email}",
+			value = "/jobseeker/{email}", //{email:.+}",
 			params= "unmark",
 			method = RequestMethod.POST)
 	public @ResponseBody String unmarkInterest(
@@ -112,10 +112,12 @@ public class RestServiceController {
 	}
     //get all interested positions for one jobseeker
     @RequestMapping(
-    		value="/jobseeker/position/{email}", 
+    		value="/jobseeker/position/{email}",//{email:.+}", 
     		method=RequestMethod.GET)
     public @ResponseBody String retrieveInterestPosition(@PathVariable String email){ //email is jobseeker's email
     	JobSeeker jobSeeker = repo_jobseeker.findByemail(email);
+    	System.out.println("email: " + jobSeeker.getEmail());
+    	System.out.println(".." + jobSeeker.getInterestSet());
     	return getPositionsJSON("InterestPositions", jobSeeker.getInterestSet());
     }
     public String getPositionsJSON(String header, Set<Position> positions){
@@ -124,6 +126,7 @@ public class RestServiceController {
 			JSONObject[] jsonArray = new JSONObject[positions.size()];
 			int i = 0;
 			for(Position position:positions){
+				System.out.println(11111);
 				JSONObject positionJson = new JSONObject();
 				positionJson.put("pid", position.getpID());
 				positionJson.put("title", position.getTitle());
@@ -147,7 +150,7 @@ public class RestServiceController {
     
     //delete jobseeker
     @RequestMapping(
-			value = "/jobseeker/{email}",
+			value = "/jobseeker/{email}", //{email:.+}",
 			method = RequestMethod.DELETE)
 	public @ResponseBody String deleteJobSeeker(
 			@PathVariable String email
@@ -158,7 +161,7 @@ public class RestServiceController {
     
     //retrieve all applications 
     @RequestMapping(
-			value = "/jobseeker/application/{email}",
+			value = "/jobseeker/application/{email}", //{email:.+}",
 			method = RequestMethod.GET)
 	public @ResponseBody String retrieveAllApplications(
 			@PathVariable String email
@@ -202,7 +205,7 @@ public class RestServiceController {
     }
     
     //update company
-    @RequestMapping(value="/company/{email}", method=RequestMethod.PUT)
+    @RequestMapping(value="/company/{email}", method=RequestMethod.PUT) //{email:.+}",
     public  @ResponseBody String updateCompany(
     		@PathVariable String email,
     		@RequestParam(value = "name", required = false) String name,
@@ -220,7 +223,7 @@ public class RestServiceController {
     
     //retrieve company
     @RequestMapping(
-			value = "/company/{email}", 
+			value = "/company/{email}", //{email:.+}", 
 			method = RequestMethod.GET)
 	public @ResponseBody String retrieveCompany(
 			@PathVariable String email
@@ -231,7 +234,7 @@ public class RestServiceController {
     
     //retrieve all positions from company
     @RequestMapping(
-			value = "/company/position/{email}", 
+			value = "/company/position/{email}", //{email:.+}", 
 			method = RequestMethod.GET)
 	public @ResponseBody String retrievePositions(
 			@PathVariable String email, 

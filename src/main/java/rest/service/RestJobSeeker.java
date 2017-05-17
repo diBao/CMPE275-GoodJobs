@@ -100,7 +100,7 @@ public class RestJobSeeker {
 		
 		JobSeeker jobseeker = repo_jobseeker.findByemail(email);
 		if(jobseeker == null){
-			return "No result found";
+			return "No email matched";
 		}
 		
 		for(Position p : jobseeker.getInterestSet()){
@@ -108,10 +108,10 @@ public class RestJobSeeker {
 		}
 		
 		for(Application a : jobseeker.getApplicationSet()){
-			
+			a.setStatus("closed");
 		}
 		
-		return "";
+		return "Deletion Success";
 	}
 	
 	public String mark_interest(String email, Long mark){
@@ -168,7 +168,9 @@ public class RestJobSeeker {
 	//Done by george 2
 	public String retrieve_all_applications(String email){
 		JobSeeker jobseeker = repo_jobseeker.findByemail(email);
+		System.out.println(7);
 		Set<Application> applications = jobseeker.getApplicationSet();
+		System.out.println(8);
 		return getApplicationsJSON("applications", applications);
 	}
 	public String getApplicationsJSON(String header, Set<Application> applications){
@@ -177,6 +179,7 @@ public class RestJobSeeker {
 			JSONObject[] jsonArray = new JSONObject[applications.size()];
 			int i = 0;
 			for(Application application: applications){
+				System.out.println(9);
 				JSONObject applicationJson = new JSONObject();
 				applicationJson.put("aid", application.getaID());
 				applicationJson.put("email", application.getEmail());
@@ -184,6 +187,8 @@ public class RestJobSeeker {
 				applicationJson.put("lastName", application.getLastName());
 				applicationJson.put("resumeUrl", application.getResumeUrl());
 				applicationJson.put("status", application.getStatus());
+				applicationJson.put("pid", application.getPosition().getpID());
+				applicationJson.put("jobTitle", application.getPosition().getTitle());
 				//result.put("status", application.getStatus());
 				jsonArray[i++] = applicationJson;
 			}

@@ -75,11 +75,11 @@ public class Position {
 	private Company company;
 	
 	// CHANGED seekerSet -> applicationSet
-	@ManyToMany(targetEntity=Application.class, fetch = FetchType.LAZY)
-	private Set<Application> applicationSet;
+	@OneToMany(targetEntity=Application.class, fetch = FetchType.LAZY)
+	private Set<Application> applicationSet = new HashSet<Application>();
 	
 	@ManyToMany(targetEntity=JobSeeker.class, fetch = FetchType.LAZY)
-	private Set<JobSeeker> interestSet;
+	private Set<JobSeeker> interestSet = new HashSet<JobSeeker>();
 
 	public String getTitle() {
 		return title;
