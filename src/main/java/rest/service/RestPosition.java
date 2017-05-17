@@ -51,22 +51,34 @@ public class RestPosition {
 	public Position updatePosition(Long pID,String pTitle,String pDesciption,String responsibility,String officeLocation,Long salary,String status){
 		//Notification all the seeker and Same return with create.
 		Position position = repo_position.findOne(pID);
+		boolean[] checkColums = new boolean[5];//default==false
+		String[] colums = new String[4];
 		if(position==null){ return position;}
 		if(position!=null){
 			if(pTitle!=null){
 				position.setTitle(pTitle);
+				checkColums[0] =true;
+				colums[0] = "title";
 			}
 			if(pDesciption!=null){
 				position.setDescription(pDesciption);
+				checkColums[1] = true;
+				colums[1] = "description";
 			}
 			if(officeLocation!=null){
 				position.setOfficeLocation(officeLocation);
+				checkColums[2] = true;
+				colums[2] = "office location";
 			}
 			if(responsibility != null){
 				position.setResponsibility(responsibility);
+				checkColums[3] = true;
+				colums[3] = "responsibility";
 			}
 			if(salary!=null){
 				position.setSalary(salary);
+				checkColums[4] = true;
+				colums[4] = "salary";
 			}
 			if(status!=null){
 				position.setStatus(status);
@@ -100,6 +112,63 @@ public class RestPosition {
 				
 			}
 			repo_position.save(position);
+			StringBuilder changeColumsInformation =new StringBuilder( "position "+ pID + " changes its ");
+			for(int i = 0; i < 5; i++){
+				if(checkColums[i]){
+					changeColumsInformation.append(colums[i] + " "); 
+				}
+			}
+			Set<Application> positionApplicantSet = position.getApplicationSet();
+			String[] jobseekerEmail = new String[positionApplicantSet.size()];
+			int i = 0;
+			for(Application application:position.getApplicationSet()){
+				jobseekerEmail[i++] = application.getJobSeeker().getEmail();
+			}
+			Company company = position.getCompany();
+			String from = company.getEmail();
+			String password = company.getPassword();
+			String subject = "GoodJobs notification";
+	        String body = changeColumsInformation.toString();
+	        Properties props = System.getProperties();
+	        String host = "smtp.gmail.com";
+	        props.put("mail.smtp.starttls.enable", "true");
+	        props.put("mail.smtp.host", host);
+	        props.put("mail.smtp.user", from);
+	        props.put("mail.smtp.password", password);
+	        props.put("mail.smtp.port", "587");
+	        props.put("mail.smtp.auth", "true");
+
+	        Session session = Session.getDefaultInstance(props);
+	        MimeMessage message = new MimeMessage(session);
+
+	        try {
+	            message.setFrom(new InternetAddress(from));
+	            InternetAddress[] toAddress = new InternetAddress[jobseekerEmail.length];
+
+	            // To get the array of addresses
+	            for( int k = 0; k < jobseekerEmail.length; k++ ) {
+	                toAddress[i] = new InternetAddress(jobseekerEmail[k]);
+	            }
+
+	            for( int k = 0; k < toAddress.length; k++) {
+	                message.addRecipient(Message.RecipientType.TO, toAddress[k]);
+	            }
+
+	            message.setSubject(subject);
+	            message.setText(body);
+	            Transport transport = session.getTransport("smtp");
+	            transport.connect(host, from, password);
+	            transport.sendMessage(message, message.getAllRecipients());
+	            transport.close();
+	        }
+	        catch (AddressException ae) {
+	            ae.printStackTrace();
+	        }
+	        catch (MessagingException me) {
+	            me.printStackTrace();
+	        }
+
+			//notificationSeeker(company.getEmail(),company.getPassword(), jobseekerEmail, position.getStatus());
 		}
 		return position;
 	}

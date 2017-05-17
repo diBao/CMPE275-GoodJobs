@@ -1,6 +1,15 @@
 package rest.service;
 
+import java.util.Properties;
 import java.util.Set;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +38,36 @@ public class RestCompany {
 		Company company = new Company(name, website, logoImageUrl, address, email, description, password);
 		try{
 			repo_company.save(company);
+			String from = "cmpe275goodjobs@gmail.com";
+	    	//please add it in local env and do not git push unless you delete the password
+	    	String emailPassword = "qgv-hzg-k92-PZZ";
+			String subject = "GoodJobs Confirmation";
+		    String body ="You have company acount: "+ email + " in GoodJobs now!s";
+		    Properties props = System.getProperties();
+		    String host = "smtp.gmail.com";
+		    props.put("mail.smtp.starttls.enable", "true");
+		    props.put("mail.smtp.host", host);
+		    props.put("mail.smtp.user", from);
+		    props.put("mail.smtp.password", emailPassword);
+		    props.put("mail.smtp.port", "587");
+		    props.put("mail.smtp.auth", "true");
+		    Session session = Session.getDefaultInstance(props);
+		    MimeMessage message = new MimeMessage(session);
+		    try {
+		            message.setFrom(new InternetAddress(from));
+		            InternetAddress toAddress = new InternetAddress(email);
+		            message.addRecipient(Message.RecipientType.TO, toAddress);
+		            message.setSubject(subject);
+		            message.setText(body);
+		            Transport transport = session.getTransport("smtp");
+		            transport.connect(host, from, emailPassword);
+		            transport.sendMessage(message, message.getAllRecipients());
+		            transport.close();
+		    }catch (AddressException ae) {
+		            ae.printStackTrace();
+		    }catch (MessagingException me) {
+		            me.printStackTrace();
+		    }
 			return company.getJSON();
 		}
 		catch(Exception e){
