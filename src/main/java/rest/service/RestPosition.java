@@ -298,14 +298,14 @@ public class RestPosition {
 		}
  		if(salaryStart==null&&salaryEnd!=null){
 			for(Position position:repo_position.findAll()){
-				if(position.getSalary() < salaryEnd){
+				if(position.getSalary() <= salaryEnd){
  					searchSalary.add(position);
 				}
 			}
 		}
 		if(salaryEnd==null&&salaryStart!=null){
 			for(Position position:repo_position.findAll()){
-				if(position.getSalary() > salaryStart){
+				if(position.getSalary() >= salaryStart){
  					searchSalary.add(position);
 				}
 			}
@@ -320,7 +320,7 @@ public class RestPosition {
 			}else{
 				for(Position position:repo_position.findAll()){
 					Long salary = position.getSalary();
-					if( salary > salaryStart && salary < salaryEnd){
+					if( salary >= salaryStart && salary <= salaryEnd){
 						searchSalary.add(position);
 					}
 				}

@@ -44,7 +44,7 @@ public class Position {
 		this.setResponsibility(responsibility);
 		this.setOfficeLocation(officeLocation);
 		this.setSalary(salary);
-		this.setStatus("open");//initial state
+		this.setStatus("Open");//initial state
 		this.setInterestSet(new HashSet<JobSeeker>());
 		this.setSeekerSet(new HashSet<Application>());
 	}

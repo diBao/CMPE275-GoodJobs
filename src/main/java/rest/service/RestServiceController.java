@@ -41,7 +41,7 @@ public class RestServiceController {
     
     //retrieve jobseeker
 	@RequestMapping(
-			value = "/jobseeker/{email}", //{email:.+}", 
+			value = "/jobseeker/{email:.+}", //{email}", //
 			method = RequestMethod.GET)
 	public @ResponseBody String getJobSeeker(@PathVariable String email) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
@@ -67,7 +67,7 @@ public class RestServiceController {
     }
     
     //update jobseeker
-    @RequestMapping(value="/jobseeker/{email}", method=RequestMethod.PUT) //{email:.+}",
+    @RequestMapping(value="/jobseeker/{email:.+}", method=RequestMethod.PUT) //{email:.+}",
     public  @ResponseBody String updateJobSeeker(
     		@PathVariable String email,
     		@RequestParam(value = "firstname", required = false) String firstName, 
@@ -87,7 +87,7 @@ public class RestServiceController {
     
     //mark interest
     @RequestMapping(
-			value = "/jobseeker/{email}", //{email:.+}",
+			value = "/jobseeker/{email:.+}", //{email:.+}",
 			params= "mark",
 			method = RequestMethod.POST)
 	public @ResponseBody String markInterest(
@@ -100,7 +100,7 @@ public class RestServiceController {
     
     //unmark interest
     @RequestMapping(
-			value = "/jobseeker/{email}", //{email:.+}",
+			value = "/jobseeker/{email:.+}", //{email:.+}",
 			params= "unmark",
 			method = RequestMethod.POST)
 	public @ResponseBody String unmarkInterest(
@@ -112,7 +112,7 @@ public class RestServiceController {
 	}
     //get all interested positions for one jobseeker
     @RequestMapping(
-    		value="/jobseeker/position/{email}",//{email:.+}", 
+    		value="/jobseeker/position/{email:.+}",//{email:.+}", 
     		method=RequestMethod.GET)
     public @ResponseBody String retrieveInterestPosition(@PathVariable String email){ //email is jobseeker's email
     	JobSeeker jobSeeker = repo_jobseeker.findByemail(email);
@@ -150,7 +150,7 @@ public class RestServiceController {
     
     //delete jobseeker
     @RequestMapping(
-			value = "/jobseeker/{email}", //{email:.+}",
+			value = "/jobseeker/{email:.+}", //{email:.+}",
 			method = RequestMethod.DELETE)
 	public @ResponseBody String deleteJobSeeker(
 			@PathVariable String email
@@ -161,7 +161,7 @@ public class RestServiceController {
     
     //retrieve all applications 
     @RequestMapping(
-			value = "/jobseeker/application/{email}", //{email:.+}",
+			value = "/jobseeker/application/{email:.+}", //{email:.+}",
 			method = RequestMethod.GET)
 	public @ResponseBody String retrieveAllApplications(
 			@PathVariable String email
@@ -205,7 +205,7 @@ public class RestServiceController {
     }
     
     //update company
-    @RequestMapping(value="/company/{email}", method=RequestMethod.PUT) //{email:.+}",
+    @RequestMapping(value="/company/{email:.+}", method=RequestMethod.PUT) //{email:.+}",
     public  @ResponseBody String updateCompany(
     		@PathVariable String email,
     		@RequestParam(value = "name", required = false) String name,
@@ -223,7 +223,7 @@ public class RestServiceController {
     
     //retrieve company
     @RequestMapping(
-			value = "/company/{email}", //{email:.+}", 
+			value = "/company/{email:.+}", //{email:.+}", 
 			method = RequestMethod.GET)
 	public @ResponseBody String retrieveCompany(
 			@PathVariable String email
@@ -234,7 +234,7 @@ public class RestServiceController {
     
     //retrieve all positions from company
     @RequestMapping(
-			value = "/company/position/{email}", //{email:.+}", 
+			value = "/company/position/{email:.+}", //{email:.+}", 
 			method = RequestMethod.GET)
 	public @ResponseBody String retrievePositions(
 			@PathVariable String email, 
@@ -297,10 +297,10 @@ public class RestServiceController {
     		@RequestParam(value = "location", required = false) String[] location
     		) { 
 		RestPosition rest_position = new RestPosition(repo_jobseeker, repo_company, repo_application, repo_position);
-		if(title ==  null && companyName ==  null && skill ==  null && salaryStart ==  null && salaryEnd ==  null && location == null){
+		if( (title ==  null||title.length==0) && (companyName ==  null || companyName.length==0) && (skill ==  null || skill.length==0) && salaryStart ==  null && salaryEnd ==  null && (location == null || location.length==0)){
 			return rest_position.getGlobalPositions();
 		}
-		return getPositionsJSON("SearchedPositions",rest_position.searchPositions(title, companyName, skill, salaryStart, salaryEnd, location));
+		return getPositionsJSON("AllPositions",rest_position.searchPositions(title, companyName, skill, salaryStart, salaryEnd, location));
     }  
     
     
@@ -384,7 +384,7 @@ public class RestServiceController {
 			value = "/application/jobseeker", 
 			method = RequestMethod.PUT)
 	public @ResponseBody String updateApplication(
-			@RequestParam("sEamil") Long sEmail,
+			@RequestParam("sEmail") Long sEmail,
 			@RequestParam("aid") Long[] aID,
 			@RequestParam("reply") String reply
 			) {
@@ -434,7 +434,7 @@ public class RestServiceController {
 			method = RequestMethod.PUT)
 	public @ResponseBody String accRejApplication(
 			@PathVariable Long id, // application ID
-			@RequestParam("sEmail") Long sEmail,
+			@RequestParam("sEmail") String sEmail,
 			@RequestParam("reply") String reply
 			) {
 		RestApplication rest_application = new RestApplication(repo_jobseeker, repo_company, repo_application, repo_position);

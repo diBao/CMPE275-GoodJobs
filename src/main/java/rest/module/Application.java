@@ -43,7 +43,7 @@ public class Application {
 		this.setFirstName(sFirstName);
 		this.setLastName(sLastName);
 		this.setPosition(position);
-		this.setStatus("pending");//initial status(pending)
+		this.setStatus("Pending");//initial status(pending)
 		this.setResumeUrl(resumeURL);
 	}
 	@Id

@@ -60,12 +60,21 @@ public  class RestApplication {
 	
 	 private boolean generateAuthorization(JobSeeker jobSeeker, Position position) {
 		// TODO Auto-generated method stub
-		if(jobSeeker.getApplicationSet().size() > 5){
+		 int pendingApplicationNum = 0;
+		for(Application application:jobSeeker.getApplicationSet() ){
+			if(application.getStatus().equals("Pending")){
+				pendingApplicationNum++;
+			}
+		}
+		if(pendingApplicationNum>=5){
 			return false;
 		}
+//		if(jobSeeker.getApplicationSet().size() >= 5){
+//			return false;
+//		}
 		Set<String> nonTerminalStates = new HashSet<String>();
 		//"pending", "Offered"
-		nonTerminalStates.add("pending");
+		nonTerminalStates.add("Pending");
 		nonTerminalStates.add("Offered");
 		/*original find version
 		 * for(Application application: repo_application.findAll()){
@@ -116,14 +125,15 @@ public  class RestApplication {
 		//status==cancel
 		//seeker cancel applications,Set<Application>  user can cancel one or more applications
 		for(Long aID : aIDs){
-			Application application = repo_application.findOne(aID);
-			application.setStatus("Cancelled");
-			repo_application.save(application);
-			//TODO email update the application's jobseeker
-			String[] jobseekerEmail = new String[1];
-			jobseekerEmail[1] = application.getJobSeeker().getEmail();
-			Company company = application.getPosition().getCompany();
-			notificationSeeker(company.getEmail(),company.getPassword(), jobseekerEmail,"Cancelled");
+			updateApplication(aID, "Cancelled");
+//			Application application = repo_application.findOne(aID);
+//			application.setStatus("Cancelled");
+//			repo_application.save(application);
+//			//TODO email update the application's jobseeker
+//			String[] jobseekerEmail = new String[1];
+//			jobseekerEmail[1] = application.getJobSeeker().getEmail();
+//			Company company = application.getPosition().getCompany();
+//			notificationSeeker(company.getEmail(),company.getPassword(), jobseekerEmail,"Cancelled");
 
 			//notificationSeeker(application.getJobSeeker(), "Cancelled");
 		}

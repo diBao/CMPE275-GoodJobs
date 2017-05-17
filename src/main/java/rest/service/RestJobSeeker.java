@@ -189,6 +189,7 @@ public class RestJobSeeker {
 				applicationJson.put("status", application.getStatus());
 				applicationJson.put("pid", application.getPosition().getpID());
 				applicationJson.put("jobTitle", application.getPosition().getTitle());
+				applicationJson.put("jobStatus", application.getPosition().getStatus());
 				//result.put("status", application.getStatus());
 				jsonArray[i++] = applicationJson;
 			}
