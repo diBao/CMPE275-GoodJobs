@@ -35,7 +35,7 @@ public class JobSeeker {
 	}
 	
 	public JobSeeker(String firstName, String lastName, String picture, String selfIntroduction, 
-			String workExperience, String education, String skills, String email, String password){
+			String workExperience, String education, String skills, String email, String password, String code){
 		this.setFirstName(firstName);
 		this.setLastName(lastName);
 		this.setPicture(picture);
@@ -45,6 +45,7 @@ public class JobSeeker {
 		this.setSkills(skills);
 		this.setEmail(email);
 		this.setPassword(password);
+		this.setCode(code);
 	}
 	
 	@Id
@@ -78,6 +79,12 @@ public class JobSeeker {
 	
 	@Column(name = "PASSWORD", nullable = false)
 	private String password;
+	
+	@Column(name = "VERIFIED")
+	private String verified = "F";
+	
+	@Column(name = "CODE")
+	private String code;
 	
 	//@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	@ManyToMany(targetEntity = Position.class, fetch = FetchType.LAZY)
@@ -197,5 +204,21 @@ public class JobSeeker {
 		catch(JSONException e){
 			return e.toString();
 		}		
+	}
+
+	public String getVerified() {
+		return verified;
+	}
+
+	public void setVerified(String verified) {
+		this.verified = verified;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 }

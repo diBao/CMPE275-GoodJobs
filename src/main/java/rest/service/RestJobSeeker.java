@@ -7,7 +7,18 @@ import rest.repo.*;
 import rest.module.*;
 
 import java.util.Set;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import java.util.HashSet;
+import java.util.Properties;
+import java.util.Random;
 
 
 public class RestJobSeeker {
@@ -26,7 +37,40 @@ public class RestJobSeeker {
 	
 	public String create_jobseeker(String firstName, String lastName, String picture, String selfIntroduction, 
 			String workExperience, String education, String skills, String email, String password){
-		JobSeeker jobseeker = new JobSeeker(firstName, lastName, picture, selfIntroduction, workExperience, education, skills, email, password);
+		Random random = new Random();
+    	Integer verificationCode = random.nextInt();
+    	String from = "cmpe275goodjobs@gmail.com";
+    	//please add it in local env and do not git push unless you delete the password
+    	String emailPassword = "qgv-hzg-k92-PZZ";
+		String subject = "GoodJobs notification";
+	    String body ="Your registration code is: "+ verificationCode;
+	    Properties props = System.getProperties();
+	    String host = "smtp.gmail.com";
+	    props.put("mail.smtp.starttls.enable", "true");
+	    props.put("mail.smtp.host", host);
+	    props.put("mail.smtp.user", from);
+	    props.put("mail.smtp.password", emailPassword);
+	    props.put("mail.smtp.port", "587");
+	    props.put("mail.smtp.auth", "true");
+	    Session session = Session.getDefaultInstance(props);
+	    MimeMessage message = new MimeMessage(session);
+	    try {
+	            message.setFrom(new InternetAddress(from));
+	            InternetAddress toAddress = new InternetAddress(email);
+	            message.addRecipient(Message.RecipientType.TO, toAddress);
+	            message.setSubject(subject);
+	            message.setText(body);
+	            Transport transport = session.getTransport("smtp");
+	            transport.connect(host, from, emailPassword);
+	            transport.sendMessage(message, message.getAllRecipients());
+	            transport.close();
+	    }catch (AddressException ae) {
+	            ae.printStackTrace();
+	    }catch (MessagingException me) {
+	            me.printStackTrace();
+	    }
+	    //return verificationCode.toString();
+		JobSeeker jobseeker = new JobSeeker(firstName, lastName, picture, selfIntroduction, workExperience, education, skills, email, password, verificationCode.toString());
 		System.out.println(jobseeker.getsID());
 		try{
 			repo_jobseeker.save(jobseeker);
@@ -52,7 +96,7 @@ public class RestJobSeeker {
 	}
 	
 	public String update_jobseeker(String oldEmail, String firstName, String lastName, String picture, 
-			String selfIntroduction, String workExperience, String education, String skills, String email, String password){
+			String selfIntroduction, String workExperience, String education, String skills, String email, String password, String verified){
 		
 		JobSeeker jobseeker = repo_jobseeker.findByemail(oldEmail);
 		if(jobseeker == null){
@@ -85,6 +129,9 @@ public class RestJobSeeker {
 		}
 		if(password != null){
 			jobseeker.setPassword(password);
+		}
+		if(verified != null){
+			jobseeker.setVerified(verified);
 		}
 		
 		try {
@@ -201,6 +248,10 @@ public class RestJobSeeker {
 		}
     }
 	
+	public String jobseekerVerified(String email){
+		JobSeeker jobSeeker = repo_jobseeker.findByemail(email);
+		return jobSeeker.getVerified();
+	}
 //	//DONE in the rest service controller by george 1
 //	public String retrieve_all_interests(String email){
 //		JobSeeker jobseeker = repo_jobseeker.findByemail(email);

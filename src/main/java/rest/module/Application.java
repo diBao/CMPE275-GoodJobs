@@ -142,7 +142,7 @@ public class Application {
 			result.put("lastName", getLastName());
 			result.put("email", getEmail());
 			result.put("status", getStatus());
-			
+			result.put("resumeUrl", getResumeUrl());
 
 			JobSeeker jobseekerObj = getJobSeeker();
 			JSONObject jobseeker = new JSONObject();

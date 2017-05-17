@@ -156,7 +156,7 @@ public  class RestApplication {
 		//listen function, listen to the changes of itself and notify its seekerSet
 		//TODO
         String subject = "GoodJobs notification";
-        String body ="Your application changes to"+ status;
+        String body ="Your application changes to "+ status;
         Properties props = System.getProperties();
         String host = "smtp.gmail.com";
         props.put("mail.smtp.starttls.enable", "true");

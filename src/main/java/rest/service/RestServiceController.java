@@ -49,16 +49,16 @@ public class RestServiceController {
 	 ***************/
     //registration validation for job seeker
     @RequestMapping(
-    		value = "/jobseeker/varification", method=RequestMethod.GET)
-    public @ResponseBody String createSeekerVarification(
+    		value = "/jobseeker/verification", method=RequestMethod.GET)
+    public @ResponseBody String createSeekerVerification(
     		@RequestParam("email") String email){
     	Random random = new Random();
-    	Integer varificationCode = random.nextInt();
+    	Integer verificationCode = random.nextInt();
     	String from = "cmpe275goodjobs@gmail.com";
     	//please add it in local env and do not git push unless you delete the password
-    	String password = "";
+    	String password = "qgv-hzg-k92-PZZ";
 		String subject = "GoodJobs notification";
-	    String body ="Your registration code is: "+ varificationCode;
+	    String body ="Your registration code is: "+ verificationCode;
 	    Properties props = System.getProperties();
 	    String host = "smtp.gmail.com";
 	    props.put("mail.smtp.starttls.enable", "true");
@@ -84,7 +84,7 @@ public class RestServiceController {
 	    }catch (MessagingException me) {
 	            me.printStackTrace();
 	    }
-	    return varificationCode.toString();
+	    return verificationCode.toString();
     }
     //retrieve jobseeker
 	@RequestMapping(
@@ -125,11 +125,12 @@ public class RestServiceController {
     		@RequestParam(value = "education", required = false) String education, 
     		@RequestParam(value = "skills", required = false) String skills,
     		@RequestParam(value = "email", required = false) String newEmail,
-    		@RequestParam(value = "password", required = false) String password
+    		@RequestParam(value = "password", required = false) String password,
+    		@RequestParam(value = "verified", required = false) String verified
     		) {
 		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
 		return rest_jobseeker.update_jobseeker(email, firstName, lastName, picture, selfIntroduction, workExperience,
-				education, skills, newEmail, password);
+				education, skills, newEmail, password, verified);
     }
     
     //mark interest
@@ -228,6 +229,16 @@ public class RestServiceController {
 //		return rest_jobseeker.retrieve_all_interests(email);
 //	}
     
+    //if the jobseeker is verified
+    @RequestMapping(
+			value = "/jobseeker/verify/{email:.+}", //{email:.+}",
+			method = RequestMethod.GET)
+	public @ResponseBody String isVerified(
+			@PathVariable String email
+			) {
+		RestJobSeeker rest_jobseeker = new RestJobSeeker(repo_jobseeker, repo_company, repo_application, repo_position);
+		return rest_jobseeker.jobseekerVerified(email);
+	}
     
     
     /*******************
