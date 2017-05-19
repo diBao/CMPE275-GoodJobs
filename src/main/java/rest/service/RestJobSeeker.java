@@ -41,7 +41,7 @@ public class RestJobSeeker {
     	Integer verificationCode = random.nextInt();
     	String from = "cmpe275goodjobs@gmail.com";
     	//please add it in local env and do not git push unless you delete the password
-    	String emailPassword = "qgv-hzg-k92-PZZ";
+    	String emailPassword = "qgv-hZg-K92-PZZ";
 		String subject = "GoodJobs notification";
 	    String body ="Your registration code is: "+ verificationCode;
 	    Properties props = System.getProperties();
@@ -132,6 +132,47 @@ public class RestJobSeeker {
 		}
 		if(verified != null){
 			jobseeker.setVerified(verified);
+			//try{
+				//repo_company.save(company);
+				String from = "cmpe275goodjobs@gmail.com";
+		    	//please add it in local env and do not git push unless you delete the password
+		    	String emailPassword = "qgv-hZg-K92-PZZ";
+				String subject = "GoodJobs Confirmation";
+				System.out.println(1);
+			    String body ="You have jobseeker acount: "+ oldEmail + " in GoodJobs now!";
+			    Properties props = System.getProperties();
+			    String host = "smtp.gmail.com";
+			    props.put("mail.smtp.starttls.enable", "true");
+			    props.put("mail.smtp.host", host);
+			    props.put("mail.smtp.user", from);
+			    props.put("mail.smtp.password", emailPassword);
+			    props.put("mail.smtp.port", "587");
+			    props.put("mail.smtp.auth", "true");
+			    System.out.println(2);
+			    Session session = Session.getDefaultInstance(props);
+			    MimeMessage message = new MimeMessage(session);
+			    try {
+			            message.setFrom(new InternetAddress(from));
+			            //System.out.println(email);
+			            InternetAddress toAddress = new InternetAddress(oldEmail);
+			            message.addRecipient(Message.RecipientType.TO, toAddress);
+			            message.setSubject(subject);
+			            message.setText(body);
+			            Transport transport = session.getTransport("smtp");
+			            transport.connect(host, from, emailPassword);
+			            transport.sendMessage(message, message.getAllRecipients());
+			            transport.close();
+			    }catch (AddressException ae) {
+			            ae.printStackTrace();
+			    }catch (MessagingException me) {
+			            me.printStackTrace();
+			    }
+				//return company.getJSON();
+			//}
+//			catch(Exception e){
+//				//TODO error message
+//				return "update jobseeker failed";
+//			}
 		}
 		
 		try {

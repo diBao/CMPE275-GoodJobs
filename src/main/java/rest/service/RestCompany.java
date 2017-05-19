@@ -1,6 +1,10 @@
 package rest.service;
 
 import java.util.Properties;
+//<<<<<<< Updated upstream
+//=======
+import java.util.Random;
+//>>>>>>> Stashed changes
 import java.util.Set;
 
 import javax.mail.Message;
@@ -35,45 +39,42 @@ public class RestCompany {
 	
 	public String create_company(String name, String website, String logoImageUrl, 
 			String address, String email, String description, String password){
-		Company company = new Company(name, website, logoImageUrl, address, email, description, password);
-		try{
-			repo_company.save(company);
-			String from = "cmpe275goodjobs@gmail.com";
-	    	//please add it in local env and do not git push unless you delete the password
-	    	String emailPassword = "qgv-hzg-k92-PZZ";
-			String subject = "GoodJobs Confirmation";
-		    String body ="You have company acount: "+ email + " in GoodJobs now!";
-		    Properties props = System.getProperties();
-		    String host = "smtp.gmail.com";
-		    props.put("mail.smtp.starttls.enable", "true");
-		    props.put("mail.smtp.host", host);
-		    props.put("mail.smtp.user", from);
-		    props.put("mail.smtp.password", emailPassword);
-		    props.put("mail.smtp.port", "587");
-		    props.put("mail.smtp.auth", "true");
-		    Session session = Session.getDefaultInstance(props);
-		    MimeMessage message = new MimeMessage(session);
-		    try {
-		            message.setFrom(new InternetAddress(from));
-		            InternetAddress toAddress = new InternetAddress(email);
-		            message.addRecipient(Message.RecipientType.TO, toAddress);
-		            message.setSubject(subject);
-		            message.setText(body);
-		            Transport transport = session.getTransport("smtp");
-		            transport.connect(host, from, emailPassword);
-		            transport.sendMessage(message, message.getAllRecipients());
-		            transport.close();
-		    }catch (AddressException ae) {
-		            ae.printStackTrace();
-		    }catch (MessagingException me) {
-		            me.printStackTrace();
-		    }
-			return company.getJSON();
-		}
-		catch(Exception e){
-			//TODO error message
-			return "create Company failed";
-		}
+		Random random = new Random();
+    	Integer verificationCode = random.nextInt();
+    	String from = "cmpe275goodjobs@gmail.com";
+    	//please add it in local env and do not git push unless you delete the password
+    	String emailPassword = "qgv-hZg-K92-PZZ";
+		String subject = "GoodJobs notification";
+	    String body ="Your registration code is: "+ verificationCode;
+	    Properties props = System.getProperties();
+	    String host = "smtp.gmail.com";
+	    props.put("mail.smtp.starttls.enable", "true");
+	    props.put("mail.smtp.host", host);
+	    props.put("mail.smtp.user", from);
+	    props.put("mail.smtp.password", emailPassword);
+	    props.put("mail.smtp.port", "587");
+	    props.put("mail.smtp.auth", "true");
+	    Session session = Session.getDefaultInstance(props);
+	    MimeMessage message = new MimeMessage(session);
+	    try {
+	            message.setFrom(new InternetAddress(from));
+	            InternetAddress toAddress = new InternetAddress(email);
+	            message.addRecipient(Message.RecipientType.TO, toAddress);
+	            message.setSubject(subject);
+	            message.setText(body);
+	            Transport transport = session.getTransport("smtp");
+	            transport.connect(host, from, emailPassword);
+	            transport.sendMessage(message, message.getAllRecipients());
+	            transport.close();
+	    }catch (AddressException ae) {
+	            ae.printStackTrace();
+	    }catch (MessagingException me) {
+	            me.printStackTrace();
+	    }
+	    
+		Company company = new Company(name, website, logoImageUrl, address, email, description, password, verificationCode.toString());
+		repo_company.save(company);
+		return company.getJSON();
 	}
 	
 	public String retrieve_company(String email){
@@ -88,7 +89,7 @@ public class RestCompany {
 	}
 	
 	public String update_company(String newEmail, String name, String website, String logoImageUrl, String address, String email, String description,
-			String password){
+			String password, String verified){
 		Company company = repo_company.findByemail(newEmail);
 		if(company == null){
 			return "No Company found";
@@ -115,7 +116,48 @@ public class RestCompany {
 		if(password != null){
 			company.setPassword(password);
 		}
-				
+		if(verified != null){
+			company.setVerified(verified);
+			try{
+				//repo_company.save(company);
+				String from = "cmpe275goodjobs@gmail.com";
+		    	//please add it in local env and do not git push unless you delete the password
+		    	String emailPassword = "qgv-hZg-K92-PZZ";
+				String subject = "GoodJobs Confirmation";
+			    String body ="You have company acount: "+ newEmail + " in GoodJobs now!";
+			    Properties props = System.getProperties();
+			    String host = "smtp.gmail.com";
+			    props.put("mail.smtp.starttls.enable", "true");
+			    props.put("mail.smtp.host", host);
+			    props.put("mail.smtp.user", from);
+			    props.put("mail.smtp.password", emailPassword);
+			    props.put("mail.smtp.port", "587");
+			    props.put("mail.smtp.auth", "true");
+			    Session session = Session.getDefaultInstance(props);
+			    MimeMessage message = new MimeMessage(session);
+			    try {
+			            message.setFrom(new InternetAddress(from));
+			            InternetAddress toAddress = new InternetAddress(newEmail);
+			            message.addRecipient(Message.RecipientType.TO, toAddress);
+			            message.setSubject(subject);
+			            message.setText(body);
+			            Transport transport = session.getTransport("smtp");
+			            transport.connect(host, from, emailPassword);
+			            transport.sendMessage(message, message.getAllRecipients());
+			            transport.close();
+			    }catch (AddressException ae) {
+			            ae.printStackTrace();
+			    }catch (MessagingException me) {
+			            me.printStackTrace();
+			    }
+				//return company.getJSON();
+			}
+			catch(Exception e){
+				//TODO error message
+				return "create Company failed";
+			}
+		}	
+		
 		try {
         	repo_company.save(company);
         } catch (Exception e) {

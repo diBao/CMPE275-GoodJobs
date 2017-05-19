@@ -199,6 +199,8 @@ public class JobSeeker {
 			result.put("education", getEducation());
 			result.put("skill", getSkills());
 			result.put("email", getEmail());
+			result.put("code", getCode());
+			result.put("verified", getVerified());
 			return result.toString();
 		}
 		catch(JSONException e){

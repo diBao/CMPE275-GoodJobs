@@ -34,7 +34,7 @@ public class Company {
 	}
 	
 	public Company(String name, String website, String logoImageUrl, 
-			String address, String email, String description, String password){
+			String address, String email, String description, String password, String code){
 		this.setCompanyName(name);
 		this.setWebsite(website);
 		this.setLogoImageUrl(logoImageUrl);
@@ -43,6 +43,7 @@ public class Company {
 		this.setDescription(description);
 		this.setPassword(password);
 		this.setPositionSet(new HashSet<Position>());
+		this.setCode(code);
 	}
 	
 	@Id
@@ -70,6 +71,12 @@ public class Company {
 	
 	@Column(name = "PASSWORD", nullable = false)
 	private String password;
+	
+	@Column(name = "CODE")
+	private String code;
+	
+	@Column(name = "verified")
+	private String verified = "F";
 	
 	@OneToMany(mappedBy = "company")
 	private Set<Position> positionSet = new HashSet<Position>();
@@ -153,6 +160,8 @@ public class Company {
 			result.put("address", getAddress());
 			result.put("description", getDescription());
 			result.put("email", getEmail());
+			result.put("code", getCode());
+			result.put("verified", getVerified());
 			
 			JSONObject positions = new JSONObject();
 			Set<Position> positionsObj = getPositionSet();
@@ -178,5 +187,21 @@ public class Company {
 		catch(JSONException e){
 			return e.toString();
 		}		
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getVerified() {
+		return verified;
+	}
+
+	public void setVerified(String verified) {
+		this.verified = verified;
 	}
 }
